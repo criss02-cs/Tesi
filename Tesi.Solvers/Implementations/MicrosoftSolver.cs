@@ -90,10 +90,10 @@ internal class MicrosoftSolver : ISolver
     }
 
 
-    private static Dictionary<int, List<Models>> GetAssignedTask(Solution result, IEnumerable<Job> jobs,
+    private static Dictionary<int, List<AssignedTask>> GetAssignedTask(Solution result, IEnumerable<Job> jobs,
         VariableCollection<Task> startTimes)
     {
-        var assignedJobs = new Dictionary<int, List<Models>>();
+        var assignedJobs = new Dictionary<int, List<AssignedTask>>();
         foreach (var job in jobs)
         {
             foreach (var task in job.Tasks)
@@ -101,10 +101,10 @@ internal class MicrosoftSolver : ISolver
                 var startTime = result.GetVariableValue(startTimes[task].Name) ?? 0;
                 if (!assignedJobs.TryGetValue(task.Machine, out _))
                 {
-                    List<Models>? value = [];
+                    List<AssignedTask>? value = [];
                     assignedJobs.Add(task.Machine, value);
                 }
-                assignedJobs[task.Machine].Add(new Models(job.JobId, task.TaskId, (int)startTime, task.Duration));
+                assignedJobs[task.Machine].Add(new AssignedTask(job.JobId, task.TaskId, (int)startTime, task.Duration));
                 assignedJobs[task.Machine].Sort();
             }
         }

@@ -79,19 +79,19 @@ internal class GurobiSolver : ISolver
         return new SolverResult(GetAssignedTasks(model, jobs, numMachines), stopwatch.ElapsedMilliseconds, nameof(GRB.Status.OPTIMAL));
     }
 
-    private static Dictionary<int, List<Models>> GetAssignedTasks(GRBModel model, IReadOnlyList<Job> jobs, int numMachines)
+    private static Dictionary<int, List<AssignedTask>> GetAssignedTasks(GRBModel model, IReadOnlyList<Job> jobs, int numMachines)
     {
-        var assignedJobs = new Dictionary<int, List<Models>>();
+        var assignedJobs = new Dictionary<int, List<AssignedTask>>();
         for (var m = 0; m < numMachines; m++)
         {
-            var assignedTasks = new List<Models>();
+            var assignedTasks = new List<AssignedTask>();
             for (var i = 0; i < jobs.Count; i++)
             {
                 for (var j = 0; j < jobs[i].Tasks.Count; j++)
                 {
                     if (jobs[i].Tasks[j].Machine != m) continue;
                     var startTime = model.GetVarByName($"start_{i}_{j}").X;
-                    assignedTasks.Add(new Models(i, j + 1, (int)startTime, jobs[i].Tasks[j].Duration));
+                    assignedTasks.Add(new AssignedTask(i, j + 1, (int)startTime, jobs[i].Tasks[j].Duration));
                 }
             }
 

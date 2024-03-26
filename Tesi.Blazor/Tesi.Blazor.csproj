@@ -7,7 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Syncfusion.Blazor" Version="24.2.9" />
+      <!--<PackageReference Include="Syncfusion.Blazor" Version="25.1.35" />-->
+      <PackageReference Include="Syncfusion.Blazor.Gantt" Version="25.1.35" />
+      <PackageReference Include="Syncfusion.Blazor.Themes" Version="25.1.35" />
     </ItemGroup>
 
 </Project>

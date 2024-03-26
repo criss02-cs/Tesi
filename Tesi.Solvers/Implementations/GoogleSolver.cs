@@ -55,10 +55,10 @@ internal class GoogleSolver : ISolver
         return new SolverResult(GetAssignedTasks(solver, allTasks, jobs), stopwatch.ElapsedMilliseconds, status.ToString());
     }
 
-    private static Dictionary<int, List<Models>> GetAssignedTasks(CpSolver solver,
+    private static Dictionary<int, List<AssignedTask>> GetAssignedTasks(CpSolver solver,
         IReadOnlyDictionary<Tuple<int, int>, Tuple<IntVar, IntVar, IntervalVar>> allTasks, List<Job> jobs)
     {
-        var assignedJobs = new Dictionary<int, List<Models>>();
+        var assignedJobs = new Dictionary<int, List<AssignedTask>>();
         foreach (var job in jobs)
         {
             for (var taskId = 0; taskId < job.Tasks.Count; ++taskId)
@@ -72,7 +72,7 @@ internal class GoogleSolver : ISolver
                     assignedJobs.Add(task.Machine, value);
                 }
 
-                value.Add(new Models(jobs.IndexOf(job), taskId + 1, start, task.Duration));
+                value.Add(new AssignedTask(jobs.IndexOf(job), taskId + 1, start, task.Duration));
                 value.Sort();
             } 
         }

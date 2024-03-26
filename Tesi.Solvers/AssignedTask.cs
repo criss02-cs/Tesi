@@ -1,11 +1,12 @@
 ﻿namespace Tesi.Solvers;
 
-public record Models(int JobId, int TaskId, int Start, int Duration) : IComparable
+public record AssignedTask(int JobId, int TaskId, int Start, int Duration) : IComparable
 {
+    public int End => Start + Duration;
     public int CompareTo(object? obj)
     {
         if (obj is null) return 1;
-        if (obj is not Models otherTask) throw new ArgumentException("Object is not an AssignedTask");
+        if (obj is not AssignedTask otherTask) throw new ArgumentException("Object is not an AssignedTask");
         return Start != otherTask.Start
             ? Start.CompareTo(otherTask.Start)
             : Duration.CompareTo(otherTask.Duration);
@@ -29,4 +30,4 @@ public record Job(int JobId, List<Task> Tasks)
     }
 }
 
-public record SolverResult(Dictionary<int, List<Models>> AssignedTasks, long ElapsedMilliseconds, string Status);
+public record SolverResult(Dictionary<int, List<AssignedTask>> AssignedTasks, long ElapsedMilliseconds, string Status);

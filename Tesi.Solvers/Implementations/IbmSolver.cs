@@ -73,19 +73,19 @@ internal class IbmSolver : ISolver
             cplex.GetStatus().ToString());
     }
 
-    private static Dictionary<int, List<Models>> GetAssignedTasks(Cplex model, IReadOnlyList<Job> jobs, int numMachines, INumVar[][] startTimes)
+    private static Dictionary<int, List<AssignedTask>> GetAssignedTasks(Cplex model, IReadOnlyList<Job> jobs, int numMachines, INumVar[][] startTimes)
     {
-        var assignedJobs = new Dictionary<int, List<Models>>();
+        var assignedJobs = new Dictionary<int, List<AssignedTask>>();
         for (var m = 0; m < numMachines; m++)
         {
-            var assignedTasks = new List<Models>();
+            var assignedTasks = new List<AssignedTask>();
             for (var i = 0; i < jobs.Count; i++)
             {
                 for (var j = 0; j < jobs[i].Tasks.Count; j++)
                 {
                     if (jobs[i].Tasks[j].Machine != m) continue;
                     var startTime = model.GetValue(startTimes[i][j]);
-                    assignedTasks.Add(new Models(i, j + 1, (int)startTime, jobs[i].Tasks[j].Duration));
+                    assignedTasks.Add(new AssignedTask(i, j + 1, (int)startTime, jobs[i].Tasks[j].Duration));
                 }
             }
 
