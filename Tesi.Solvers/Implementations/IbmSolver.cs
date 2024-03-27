@@ -5,7 +5,7 @@ using ILOG.CPLEX;
 using System.Diagnostics;
 
 namespace Tesi.Solvers.Implementations;
-internal class IbmSolver : ISolver
+public class IbmSolver : ISolver
 {
     public SolverResult Solve(List<Job> jobs, int horizon, int numMachines, int[] allMachines)
     {

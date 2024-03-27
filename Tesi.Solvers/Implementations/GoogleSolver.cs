@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Google.OrTools.Sat;
 
 namespace Tesi.Solvers.Implementations;
-internal class GoogleSolver : ISolver
+public class GoogleSolver : ISolver
 {
     public SolverResult Solve(List<Job> jobs, int horizon, int numMachines, int[] allMachines)
     {
@@ -29,7 +29,7 @@ internal class GoogleSolver : ISolver
             for (var taskId = 0; taskId < currentJob.Tasks.Count - 1; ++taskId)
             {
                 var key1 = Tuple.Create(jobs.IndexOf(currentJob), taskId);
-                var key2 = Tuple.Create(jobs.IndexOf(currentJob), taskId);
+                var key2 = Tuple.Create(jobs.IndexOf(currentJob), taskId + 1);
                 model.Add(allTasks[key2].Item1 >= allTasks[key1].Item2);
             }
         }

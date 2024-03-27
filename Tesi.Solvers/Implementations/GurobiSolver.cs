@@ -9,7 +9,7 @@ using Google.Protobuf.WellKnownTypes;
 using Gurobi;
 
 namespace Tesi.Solvers.Implementations;
-internal class GurobiSolver : ISolver
+public class GurobiSolver : ISolver
 {
     public SolverResult Solve(List<Job> jobs, int horizon, int numMachines, int[] allMachines)
     {

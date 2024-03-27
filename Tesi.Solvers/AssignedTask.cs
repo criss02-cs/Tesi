@@ -2,6 +2,7 @@
 
 public record AssignedTask(int JobId, int TaskId, int Start, int Duration) : IComparable
 {
+    public string Name => $"Job_{JobId}_Task_{TaskId}"; // $"{JobId}_{TaskId}
     public int End => Start + Duration;
     public int CompareTo(object? obj)
     {

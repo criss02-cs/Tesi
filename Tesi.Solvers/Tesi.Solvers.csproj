@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Google.OrTools" Version="9.9.3963" />
+    <PackageReference Include="Google.OrTools.runtime.osx-arm64" Version="9.9.3963" />
     <PackageReference Include="Gurobi.Optimizer" Version="11.0.1" />
     <PackageReference Include="Microsoft.Z3" Version="4.12.2" />
     <PackageReference Include="OPTANO.Modeling" Version="3.22.0.647" />
@@ -15,10 +16,10 @@
 
   <ItemGroup>
     <Reference Include="ILOG.Concert">
-      <HintPath>C:\Program Files\IBM\ILOG\CPLEX_Studio_Community2211\cplex\bin\x64_win64\ILOG.Concert.dll</HintPath>
+      <HintPath>..\Tesi.Dll\ILOG.Concert.dll</HintPath>
     </Reference>
     <Reference Include="ILOG.CPLEX">
-      <HintPath>C:\Program Files\IBM\ILOG\CPLEX_Studio_Community2211\cplex\bin\x64_win64\ILOG.CPLEX.dll</HintPath>
+      <HintPath>..\Tesi.Dll\ILOG.CPLEX.dll</HintPath>
     </Reference>
   </ItemGroup>
 

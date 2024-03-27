@@ -10,7 +10,7 @@ using OPTANO.Modeling.Optimization.Solver;
 using OPTANO.Modeling.Optimization.Solver.Z3;
 
 namespace Tesi.Solvers.Implementations;
-internal class MicrosoftSolver : ISolver
+public class MicrosoftSolver : ISolver
 {
     public SolverResult Solve(List<Job> jobs, int horizon, int numMachines, int[] allMachines)
     {
