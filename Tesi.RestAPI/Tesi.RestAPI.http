@@ -1,6 +1,0 @@
-@Tesi.RestAPI_HostAddress = http://localhost:5273
-
-GET {{Tesi.RestAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

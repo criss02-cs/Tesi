@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesi.Solvers", "Tesi.Solvers\Tesi.Solvers.csproj", "{A4D3BC50-BD5B-42C7-B698-A1085BD247BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesi.Solvers", "Tesi.Solvers\Tesi.Solvers.csproj", "{A4D3BC50-BD5B-42C7-B698-A1085BD247BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesi.Blazor", "Tesi.Blazor\Tesi.Blazor.csproj", "{15D3A7EA-3B79-4EDB-BBCD-41313A569B22}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tesi.Blazor", "Tesi.Blazor", "{FBD87B53-0DF6-45EA-8D26-6D11A9BCCC06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesi.RestAPI", "Tesi.RestAPI\Tesi.RestAPI.csproj", "{6D9564B4-2033-4DAE-9D3D-39C28DA8F2AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesi.Blazor.Server", "Tesi.Blazor\Tesi.Blazor.Server\Tesi.Blazor.Server.csproj", "{AFDD534E-ABC1-4A47-BACF-087185049564}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesi.Blazor.Shared", "Tesi.Blazor\Tesi.Blazor.Shared\Tesi.Blazor.Shared.csproj", "{2592E19A-9A8A-48E6-9A00-DD7FB4F065BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesi.Blazor.Client", "Tesi.Blazor\Tesi.Blazor.Client\Tesi.Blazor.Client.csproj", "{A5E7548F-87CC-4100-919C-76F7F1AA15CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,16 +23,28 @@ Global
 		{A4D3BC50-BD5B-42C7-B698-A1085BD247BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4D3BC50-BD5B-42C7-B698-A1085BD247BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4D3BC50-BD5B-42C7-B698-A1085BD247BF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{15D3A7EA-3B79-4EDB-BBCD-41313A569B22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15D3A7EA-3B79-4EDB-BBCD-41313A569B22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15D3A7EA-3B79-4EDB-BBCD-41313A569B22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15D3A7EA-3B79-4EDB-BBCD-41313A569B22}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D9564B4-2033-4DAE-9D3D-39C28DA8F2AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D9564B4-2033-4DAE-9D3D-39C28DA8F2AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D9564B4-2033-4DAE-9D3D-39C28DA8F2AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D9564B4-2033-4DAE-9D3D-39C28DA8F2AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFDD534E-ABC1-4A47-BACF-087185049564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFDD534E-ABC1-4A47-BACF-087185049564}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFDD534E-ABC1-4A47-BACF-087185049564}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFDD534E-ABC1-4A47-BACF-087185049564}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2592E19A-9A8A-48E6-9A00-DD7FB4F065BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2592E19A-9A8A-48E6-9A00-DD7FB4F065BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2592E19A-9A8A-48E6-9A00-DD7FB4F065BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2592E19A-9A8A-48E6-9A00-DD7FB4F065BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5E7548F-87CC-4100-919C-76F7F1AA15CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5E7548F-87CC-4100-919C-76F7F1AA15CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5E7548F-87CC-4100-919C-76F7F1AA15CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5E7548F-87CC-4100-919C-76F7F1AA15CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AFDD534E-ABC1-4A47-BACF-087185049564} = {FBD87B53-0DF6-45EA-8D26-6D11A9BCCC06}
+		{2592E19A-9A8A-48E6-9A00-DD7FB4F065BF} = {FBD87B53-0DF6-45EA-8D26-6D11A9BCCC06}
+		{A5E7548F-87CC-4100-919C-76F7F1AA15CB} = {FBD87B53-0DF6-45EA-8D26-6D11A9BCCC06}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {70A5EA5C-32FA-4192-9622-6B179979D6AE}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,104 @@
+﻿@page "/"
+@using System.Text.Json.Serialization
+@using System.Text.Json
+@using Tesi.Blazor.Shared.ExtensionMethods
+
+<div class="gantt">
+    <SfGantt DataSource="@TaskCollection" IncludeWeekend="true" EnablePredecessorValidation="false"
+             Height="100%" Width="100%" AllowUnscheduledTasks="true" TValue="GanttData"
+             ProjectStartDate="@_projectStartDate" ProjectEndDate="@_projectEndDate"
+             GridLines="Syncfusion.Blazor.Gantt.GridLine.Both">
+        <GanttColumns>
+            <GanttColumn Field="Name" HeaderText="Name"></GanttColumn>
+            <GanttColumn Field="StartDate" HeaderText="Start Date">
+            </GanttColumn>
+        </GanttColumns>
+        <GanttTaskFields Id="Id" Name="Name" StartDate="StartDate" EndDate="EndDate" Duration="Duration" Progress="Progress"
+                         ParentID="ParentId"
+                         Dependency="Predecessor" />
+        <GanttTimelineSettings TimelineViewMode="TimelineViewMode.Day">
+            <GanttTopTierSettings Unit="TimelineViewMode.Month"></GanttTopTierSettings>
+            <GanttBottomTierSettings Unit="TimelineViewMode.Day">
+                <FormatterTemplate>
+                    @{
+                        if (context.Tier == "bottom")
+                        {
+                            @context.Date.Day
+                        }
+                    }
+                </FormatterTemplate>
+            </GanttBottomTierSettings>
+        </GanttTimelineSettings>
+    </SfGantt>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">Elapsed time:</div>
+        <div class="col">@_result?.ElapsedMilliseconds ms</div>
+    </div>
+</div>
+
+<div class="container mt-1">
+    @if (_result is not null)
+    {
+        @foreach (var res in _result.AssignedTasks)
+        {
+            <div class="row">
+                <div class="col-2">
+                    Machine: @res.Key
+                </div>
+                @foreach (var task in res.Value)
+                {
+                    <div class="col-2">
+                        <div class="container">
+                            <div class="row">
+                                @($"job_{task.JobId}_task_{task.TaskId}")
+                            </div>
+                            <div class="row">
+                                @($"[{task.Start}, {task.End}]")
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
+@code {
+    private List<GanttData> TaskCollection { get; set; } = [];
+    private SolverResult? _result = new([], 0, "");
+    private readonly DateTime _projectStartDate = DateTime.Now.Date;
+    private DateTime _projectEndDate = DateTime.Now.Date.AddDays(20);
+
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        using var client = new HttpClient();
+        _result = await client.GetFromJsonAsync<SolverResult>("http://localhost:5076/api/Or/microsoft");
+        if (_result is null) return;
+        RenderTasks();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        RenderTasks();
+        base.OnAfterRender(firstRender);
+    }
+
+    private void RenderTasks()
+    {
+        TaskCollection = [];
+        var maxDuration = 0;
+        if (_result is null) return;
+        var converter = new GanttAdapter(_result.AssignedTasks);
+        TaskCollection = converter.Convert();
+        var max = TaskCollection
+            .Where(x => x.Name != null && x.Name.Contains("Machine"))
+            .Select(x => x.Duration?.Replace("days", "").ToInt32())
+            .Max(x => x);
+        Console.WriteLine($"Max days: {max}");
+        if (max != null) _projectEndDate = _projectStartDate.AddDays(max.Value);
+    }
+
+}

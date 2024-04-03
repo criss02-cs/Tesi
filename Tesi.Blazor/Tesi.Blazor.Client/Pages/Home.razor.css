@@ -1,0 +1,8 @@
+﻿.gantt {
+    width: 80vw;
+    border: 2px solid;
+    padding: 20px;
+    resize: both;
+    overflow: auto;
+}
+
