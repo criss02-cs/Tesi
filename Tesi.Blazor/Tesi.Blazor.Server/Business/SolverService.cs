@@ -4,9 +4,14 @@ using JobTask = Tesi.Solvers.Task;
 
 namespace Tesi.Blazor.Server.Business;
 
+/// <summary>
+/// Classe di servizio che permette di usare tutti i solvers implementati.
+/// Fa utilizzo del Design Pattern <see cref="https://refactoring.guru/design-patterns/strategy">Strategy</see> per poter scegliere
+/// fra i diversi solvers, senza dover duplicare il codice.
+/// </summary>
 public class SolverService
 {
-    private List<Job> _jobs =
+    private readonly List<Job> _jobs =
     [
         new Job(0, [
             new JobTask(0, 3, 1),
@@ -24,51 +29,52 @@ public class SolverService
         ]),
     ];
 
-    private int _numMachines = 0;
+    private int _numMachines;
     private int[] _allMachines = [];
-    private int _horizon = 0;
-    public SolverResult SolveWithGoogle()
+    private int _horizon;
+    private ISolver? _solver;
+
+    #region CTORS
+
+    public SolverService()
     {
-        CalculateData();
-        var solver = new GoogleSolver();
-        return solver.Solve(_jobs, _horizon, _numMachines, _allMachines);
+
+    }
+    public SolverService(ISolver? solver)
+    {
+        _solver = solver;
     }
 
-    public SolverResult SolveWithIbm()
+    #endregion
+
+    public void SetSolver(Solvers.Solvers solver)
     {
-        CalculateData();
-        var solver = new IbmSolver();
-        return solver.Solve(_jobs, _horizon, _numMachines, _allMachines);
+        _solver = solver switch
+        {
+            Solvers.Solvers.GOOGLE => new GoogleSolver(),
+            Solvers.Solvers.IBM => new IbmSolver(),
+            Solvers.Solvers.GUROBI => new GurobiSolver(),
+            Solvers.Solvers.MICROSOFT => new MicrosoftSolver(),
+            _ => _solver
+        };
     }
 
-    public SolverResult SolveWithGurobi()
+    public SolverResult Solve()
     {
         CalculateData();
-        var solver = new GurobiSolver();
-        return solver.Solve(_jobs, _horizon, _numMachines, _allMachines);
+        return _solver?.Solve(_jobs, _horizon, _numMachines, _allMachines) ?? new SolverResult([], 0, "Solver not initialized");
     }
-    public SolverResult SolveWithMicrosoft()
-    {
-        CalculateData();
-        var solver = new MicrosoftSolver();
-        return solver.Solve(_jobs, _horizon, _numMachines, _allMachines);
-    }
+
     private void CalculateData()
     {
-        foreach (var job in _jobs)
+        foreach (var task in _jobs.SelectMany(job => job.Tasks))
         {
-            foreach (var task in job.Tasks)
-            {
-                _numMachines = Math.Max(_numMachines, 1 + task.Machine);
-            }
+            _numMachines = Math.Max(_numMachines, 1 + task.Machine);
         }
         _allMachines = Enumerable.Range(0, _numMachines).ToArray();
-        foreach (var job in _jobs)
+        foreach (var task in _jobs.SelectMany(job => job.Tasks))
         {
-            foreach (var task in job.Tasks)
-            {
-                _horizon += task.Duration;
-            }
+            _horizon += task.Duration;
         }
     }
 }

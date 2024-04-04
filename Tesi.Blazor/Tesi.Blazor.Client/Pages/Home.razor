@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using System.Text.Json.Serialization
 @using System.Text.Json
+@using Syncfusion.Blazor.Grids
 @using Tesi.Blazor.Shared.ExtensionMethods
 
 <div class="gantt">
@@ -9,8 +10,8 @@
              ProjectStartDate="@_projectStartDate" ProjectEndDate="@_projectEndDate"
              GridLines="Syncfusion.Blazor.Gantt.GridLine.Both">
         <GanttColumns>
-            <GanttColumn Field="Name" HeaderText="Name"></GanttColumn>
-            <GanttColumn Field="StartDate" HeaderText="Start Date">
+            <GanttColumn Field="Name" HeaderText="Name" TextAlign="TextAlign.Center"></GanttColumn>
+            <GanttColumn Field="StartDate" HeaderText="Start Date" TextAlign="TextAlign.Center">
             </GanttColumn>
         </GanttColumns>
         <GanttTaskFields Id="Id" Name="Name" StartDate="StartDate" EndDate="EndDate" Duration="Duration" Progress="Progress"
@@ -29,6 +30,7 @@
                 </FormatterTemplate>
             </GanttBottomTierSettings>
         </GanttTimelineSettings>
+        <GanttSplitterSettings Position="30%"></GanttSplitterSettings>
     </SfGantt>
 </div>
 

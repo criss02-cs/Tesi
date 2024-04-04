@@ -1,3 +1,9 @@
+:root {
+    --unicam-bg-color: #222C4A;
+    --unicam-text-color: #e2001a;
+}
+
+
 html, body {
     font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
 }
@@ -12,7 +18,7 @@ a, .btn-link {
 
 .btn-primary {
     color: #fff;
-    background-color: #1b3b5d;
+    background-color: var(--unicam-bg-color);
     border-color: #1861ac;
 }
 
@@ -82,7 +88,7 @@ a, .btn-link {
     }
 
         .loading-progress circle:last-child {
-            stroke: #1b3b5d;
+            stroke: var(--unicam-bg-color);
             stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
             transition: stroke-dasharray 0.05s ease-in-out;
         }

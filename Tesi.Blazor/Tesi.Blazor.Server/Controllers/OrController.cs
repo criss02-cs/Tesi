@@ -10,23 +10,27 @@ public class OrController(SolverService service) : ControllerBase
     [HttpGet, Route("google")]
     public IActionResult Google()
     {
-        return Ok(service.SolveWithGoogle());
+        service.SetSolver(Solvers.Solvers.GOOGLE);
+        return Ok(service.Solve());
     }
 
     [HttpGet, Route("ibm")]
     public IActionResult Ibm()
     {
-        return Ok(service.SolveWithIbm());
+        service.SetSolver(Solvers.Solvers.IBM);
+        return Ok(service.Solve());
     }
 
     [HttpGet, Route("gurobi")]
     public IActionResult Gurobi()
     {
-        return Ok(service.SolveWithGurobi());
+        service.SetSolver(Solvers.Solvers.GUROBI);
+        return Ok(service.Solve());
     }
     [HttpGet, Route("microsoft")]
     public IActionResult Microsoft()
     {
-        return Ok(service.SolveWithMicrosoft());
+        service.SetSolver(Solvers.Solvers.MICROSOFT);
+        return Ok(service.Solve());
     }
 }

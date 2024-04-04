@@ -9,7 +9,7 @@ main {
 }
 
 .sidebar {
-    background: #1b3b5d;
+    background: var(--unicam-bg-color);
 }
 
 .top-row {
