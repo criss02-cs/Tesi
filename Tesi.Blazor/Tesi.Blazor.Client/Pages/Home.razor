@@ -91,7 +91,6 @@
     private void RenderTasks()
     {
         TaskCollection = [];
-        var maxDuration = 0;
         if (_result is null) return;
         var converter = new GanttAdapter(_result.AssignedTasks);
         TaskCollection = converter.Convert();
