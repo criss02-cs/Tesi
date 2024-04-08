@@ -7,3 +7,4 @@ riderModule.iml
 /.idea
 PublishProfiles/
 .config/
+/Tesi.Blazor/Tesi.Blazor.Client/appsettings.secrets.json
