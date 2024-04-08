@@ -3,6 +3,7 @@
 @using System.Text.Json
 @using Syncfusion.Blazor.Grids
 @using Tesi.Blazor.Shared.ExtensionMethods
+@inject HttpClient Http
 
 <div class="gantt">
     <SfGantt DataSource="@TaskCollection" IncludeWeekend="true" EnablePredecessorValidation="false"
@@ -76,8 +77,7 @@
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        using var client = new HttpClient();
-        _result = await client.GetFromJsonAsync<SolverResult>("http://localhost:5076/api/Or/microsoft");
+        _result = await Http.GetFromJsonAsync<SolverResult>("Or/microsoft");
         if (_result is null) return;
         RenderTasks();
     }

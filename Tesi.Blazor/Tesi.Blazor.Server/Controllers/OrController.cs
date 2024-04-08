@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tesi.Blazor.Server.Business;
 
 namespace Tesi.Blazor.Server.Controllers;
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class OrController(SolverService service) : ControllerBase
 {

@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Tesi.Solvers\Tesi.Solvers.csproj" />
+    <ProjectReference Include="..\Tesi.Blazor.Client\Tesi.Blazor.Client.csproj" />
     <ProjectReference Include="..\Tesi.Blazor.Shared\Tesi.Blazor.Shared.csproj" />
   </ItemGroup>
 

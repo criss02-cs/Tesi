@@ -8,7 +8,8 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddSyncfusionBlazor();
 
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzIwMTczMUAzMjM1MmUzMDJlMzBHRElRSUZ3REhtVDR5YWtNSVJqMytHNkw5ajBnRnN1UVo4dXBDWkh3SVVFPQ==");
+var license = builder.Configuration["SyncfusionLicense"];
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(license);
 
 
 
