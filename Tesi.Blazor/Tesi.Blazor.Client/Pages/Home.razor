@@ -3,9 +3,16 @@
 @using System.Text.Json
 @using Syncfusion.Blazor.Grids
 @using Tesi.Blazor.Shared.ExtensionMethods
+@using Task = System.Threading.Tasks.Task
 @inject HttpClient Http
 
 <div class="gantt">
+    <div class="container my-3 mt-0 mx-0">
+        <div class="row">
+            <div class="col-2">Tempo per l'esecuzione:</div>
+            <div class="col-1">@_result?.ElapsedMilliseconds ms</div>
+        </div>
+    </div>
     <SfGantt DataSource="@TaskCollection" IncludeWeekend="true" EnablePredecessorValidation="false"
              Height="100%" Width="100%" AllowUnscheduledTasks="true" TValue="GanttData"
              ProjectStartDate="@_projectStartDate" ProjectEndDate="@_projectEndDate"
@@ -17,7 +24,7 @@
         </GanttColumns>
         <GanttTaskFields Id="Id" Name="Name" StartDate="StartDate" EndDate="EndDate" Duration="Duration" Progress="Progress"
                          ParentID="ParentId"
-                         Dependency="Predecessor" />
+                         Dependency="Predecessor"/>
         <GanttTimelineSettings TimelineViewMode="TimelineViewMode.Day">
             <GanttTopTierSettings Unit="TimelineViewMode.Month"></GanttTopTierSettings>
             <GanttBottomTierSettings Unit="TimelineViewMode.Day">
@@ -35,14 +42,24 @@
     </SfGantt>
 </div>
 
-<div class="container">
+<div class="container my-3">
     <div class="row">
-        <div class="col">Elapsed time:</div>
-        <div class="col">@_result?.ElapsedMilliseconds ms</div>
+        <div class="col-1">
+            <span style="font-weight: bold; font-size: 20px">Carica dati</span>
+        </div>
+        <div class="col"></div>
+        <div class="col-3">
+            <SfComboBox TValue="string" TItem="dynamic" Placeholder="Seleziona un solver" DataSource="@_solvers" @bind-Value="_solver">
+                <ComboBoxFieldSettings Text="Label" Value="Value"></ComboBoxFieldSettings>
+                <ComboBoxEvents TValue="string" TItem="dynamic" OnValueSelect="@OnSolverSelected"></ComboBoxEvents>
+            </SfComboBox>
+        </div>
     </div>
 </div>
 
-<div class="container mt-1">
+
+
+<div class="container my-3">
     @if (_result is not null)
     {
         @foreach (var res in _result.AssignedTasks)
@@ -74,10 +91,12 @@
     private SolverResult? _result = new([], 0, "");
     private readonly DateTime _projectStartDate = DateTime.Now.Date;
     private DateTime _projectEndDate = DateTime.Now.Date.AddDays(20);
+    private string _solver = "google";
+    private readonly IEnumerable<dynamic> _solvers = Enum.GetNames<Solvers>().Select(x => new { Label = x.ToLower(), Value = x.ToLower() });
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        _result = await Http.GetFromJsonAsync<SolverResult>("Or/microsoft");
+        _result = await Http.GetFromJsonAsync<SolverResult>($"Or/{_solver}");
         if (_result is null) return;
         RenderTasks();
     }
@@ -100,6 +119,14 @@
             .Max(x => x);
         Console.WriteLine($"Max days: {max}");
         if (max != null) _projectEndDate = _projectStartDate.AddDays(max.Value);
+    }
+
+    private async Task OnSolverSelected(SelectEventArgs<dynamic> obj)
+    {
+        _solver = obj.ItemData.Value;
+        _result = await Http.GetFromJsonAsync<SolverResult>($"Or/{_solver}");
+        if (_result is null) return;
+        RenderTasks();
     }
 
 }

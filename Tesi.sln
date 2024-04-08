@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesi.Blazor.Server", "Tesi.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesi.Blazor.Shared", "Tesi.Blazor\Tesi.Blazor.Shared\Tesi.Blazor.Shared.csproj", "{2592E19A-9A8A-48E6-9A00-DD7FB4F065BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesi.Blazor.Client", "Tesi.Blazor\Tesi.Blazor.Client\Tesi.Blazor.Client.csproj", "{A5E7548F-87CC-4100-919C-76F7F1AA15CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tesi.Blazor.Client", "Tesi.Blazor\Tesi.Blazor.Client\Tesi.Blazor.Client.csproj", "{A5E7548F-87CC-4100-919C-76F7F1AA15CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

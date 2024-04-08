@@ -1,0 +1,32 @@
+﻿@using Task = System.Threading.Tasks.Task
+@inject IJSRuntime JSRuntime;
+
+<label id="switch" class="switch">
+    <input type="checkbox" id="slider" @onchange="@ToogleTheme">
+    <span class="slider round"></span>
+</label>
+@code {
+    private bool _checked = true;
+    private bool _shouldRender = true;
+
+    private void ToogleTheme(ChangeEventArgs e)
+    {
+        _checked = !_checked;
+        var theme = _checked ? "bootstrap-dark" : "bootstrap5";
+        JSRuntime.InvokeAsync<object>("setTheme", theme);
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            JSRuntime.InvokeAsync<object>("setTheme", "bootstrap-dark");
+            _shouldRender = false;
+        }
+        base.OnAfterRender(firstRender);
+    }
+
+    protected override bool ShouldRender() => _shouldRender;
+
+
+}

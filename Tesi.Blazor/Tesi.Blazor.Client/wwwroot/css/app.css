@@ -6,6 +6,7 @@
 
 html, body {
     font-family: "Titillium Web", Geneva, Tahoma, sans-serif;
+    overflow-y: hidden;
 }
 
 h1:focus {
@@ -14,6 +15,16 @@ h1:focus {
 
 a, .btn-link {
     color: #0071c1;
+}
+
+.dark {
+    background-color: #1a1a1a;
+    color: white;
+}
+
+.light {
+    background-color: white;
+    color: #212529;
 }
 
 .btn-primary {
