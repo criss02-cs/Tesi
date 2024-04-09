@@ -14,6 +14,7 @@
     <PackageReference Include="Syncfusion.Blazor.Gantt" Version="25.1.38" />
     <PackageReference Include="Syncfusion.Blazor.Themes" Version="25.1.38" />
     <PackageReference Include="Syncfusion.Blazor.DropDowns" Version="25.1.38" />
+    <PackageReference Include="Syncfusion.Blazor.Popups" Version="25.1.38" />
   </ItemGroup>
 
   <ItemGroup>
