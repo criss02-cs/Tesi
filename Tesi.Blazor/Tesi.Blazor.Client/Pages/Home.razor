@@ -24,7 +24,7 @@
         </GanttColumns>
         <GanttTaskFields Id="Id" Name="Name" StartDate="StartDate" EndDate="EndDate" Duration="Duration" Progress="Progress"
                          ParentID="ParentId"
-                         Dependency="Predecessor"/>
+                         Dependency="Predecessor" />
         <GanttTimelineSettings TimelineViewMode="TimelineViewMode.Day">
             <GanttTopTierSettings Unit="TimelineViewMode.Month"></GanttTopTierSettings>
             <GanttBottomTierSettings Unit="TimelineViewMode.Day">
@@ -43,21 +43,49 @@
 </div>
 
 <div class="container my-3">
-    <div class="row">
-        <div class="col-1">
+    <div class="row my-2">
+        <div class="col-6 col-md-9">
             <span style="font-weight: bold; font-size: 20px">Carica dati</span>
         </div>
-        <div class="col"></div>
-        <div class="col-3">
+        <div class="col-6 col-md-3">
             <SfComboBox TValue="string" TItem="dynamic" Placeholder="Seleziona un solver" DataSource="@_solvers" @bind-Value="_solver">
                 <ComboBoxFieldSettings Text="Label" Value="Value"></ComboBoxFieldSettings>
                 <ComboBoxEvents TValue="string" TItem="dynamic" OnValueSelect="@OnSolverSelected"></ComboBoxEvents>
             </SfComboBox>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-9">
+            <SfAccordion>
+                <AccordionItems>
+                    <AccordionItem Header="Job 0" Content="Lista di task"></AccordionItem>
+                </AccordionItems>
+            </SfAccordion>
+        </div>
+        <div class="col-sm-12 col-md-3">
+            <SfListView DataSource="_machines">
+                <ListViewFieldSettings TValue="Machine" Id="Id" Text="Description"></ListViewFieldSettings>
+                <ListViewTemplates TValue="Machine">
+                    <Template>
+                        <div class="container m-0 p-0">
+                            <div class="row">
+                                <div class="col-10">
+                                    @(context.Description)
+                                </div>
+                                <div class="col-2" style="text-align: center">
+                                    <SfTooltip Target="@MachineId(context.Id)" Content="Elimina la macchina">
+                                        <span @onclick="() => _machines.Remove(context)" class="bi bi-x-lg" id="@MachineId(context.Id).Replace("#", "")"></span>
+                                    </SfTooltip>
+                                </div>
+                            </div>
+                        </div>
+                    </Template>
+                </ListViewTemplates>
+            </SfListView>
+            <button @onclick="() => _machines.Add(new Machine(_machines.Count + 1))" type="button" class="btn btn-primary mt-2">Aggiungi una nuova macchina</button>
+        </div>
+    </div>
 </div>
-
-
 
 <div class="container my-3">
     @if (_result is not null)
@@ -92,7 +120,8 @@
     private readonly DateTime _projectStartDate = DateTime.Now.Date;
     private DateTime _projectEndDate = DateTime.Now.Date.AddDays(20);
     private string _solver = "google";
-    private readonly IEnumerable<dynamic> _solvers = Enum.GetNames<Solvers>().Select(x => new { Label = x.ToLower(), Value = x.ToLower() });
+    private readonly IEnumerable<dynamic> _solvers = Enum.GetNames<Solvers>().Select(x => new { Label = x.ToTitleCase(), Value = x.ToLower() });
+    private List<Machine> _machines = [];
 
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
@@ -103,7 +132,7 @@
 
     protected override void OnAfterRender(bool firstRender)
     {
-        RenderTasks();
+        if(firstRender) RenderTasks();
         base.OnAfterRender(firstRender);
     }
 
@@ -128,5 +157,7 @@
         if (_result is null) return;
         RenderTasks();
     }
+
+    private string MachineId(int id) => $"#Machine_{id}";
 
 }

@@ -11,4 +11,14 @@ public static class StringExtensions
     {
         return int.TryParse(value, out var result) ? result : int.MinValue;
     }
+
+    public static string ToTitleCase(this string value)
+    {
+        return value switch
+        {
+            null => string.Empty,
+            "" => string.Empty,
+            _ => value.First().ToString().ToUpper() + value[1..].ToLower()
+        };
+    }
 }
