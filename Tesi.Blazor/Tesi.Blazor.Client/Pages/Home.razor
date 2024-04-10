@@ -9,8 +9,8 @@
 <div class="gantt">
     <div class="container my-3 mt-0 mx-0">
         <div class="row">
-            <div class="col-2">Tempo per l'esecuzione:</div>
-            <div class="col-1">@_result?.ElapsedMilliseconds ms</div>
+            <div class="col-7 col-md-2">Tempo per l'esecuzione:</div>
+            <div class="col-3">@_result?.ElapsedMilliseconds ms</div>
         </div>
     </div>
     <SfGantt DataSource="@TaskCollection" IncludeWeekend="true" EnablePredecessorValidation="false"
@@ -26,7 +26,16 @@
                          ParentID="ParentId"
                          Dependency="Predecessor" />
         <GanttTimelineSettings TimelineViewMode="TimelineViewMode.Day">
-            <GanttTopTierSettings Unit="TimelineViewMode.Month"></GanttTopTierSettings>
+            <GanttTopTierSettings Unit="TimelineViewMode.Month">
+                <FormatterTemplate>
+                    @{
+                        if (context.Tier == "top")
+                        {
+                            @context.Date.ToString("Y").ToTitleCase()
+                        }
+                    }
+                </FormatterTemplate>
+            </GanttTopTierSettings>
             <GanttBottomTierSettings Unit="TimelineViewMode.Day">
                 <FormatterTemplate>
                     @{
@@ -63,7 +72,7 @@
             </SfAccordion>
         </div>
         <div class="col-sm-12 col-md-3">
-            <SfListView DataSource="_machines">
+            <SfListView DataSource="_machines" ShowHeader="true" HeaderTitle="Macchine">
                 <ListViewFieldSettings TValue="Machine" Id="Id" Text="Description"></ListViewFieldSettings>
                 <ListViewTemplates TValue="Machine">
                     <Template>
@@ -82,29 +91,33 @@
                     </Template>
                 </ListViewTemplates>
             </SfListView>
-            <button @onclick="() => _machines.Add(new Machine(_machines.Count + 1))" type="button" class="btn btn-primary mt-2">Aggiungi una nuova macchina</button>
+            <button @onclick="() => _machines.Add(new Machine(_machines.Count + 1))" type="button" class="btn btn-success mt-2">Aggiungi una nuova macchina</button>
         </div>
     </div>
 </div>
 
-<div class="container my-3">
+<div class="container my-3 mx-0 mx-md-auto">
     @if (_result is not null)
     {
         @foreach (var res in _result.AssignedTasks)
         {
             <div class="row">
-                <div class="col-2">
-                    Machine: @res.Key
+                <div class="col-12 col-md-2">
+                    Machine @res.Key:
                 </div>
                 @foreach (var task in res.Value)
                 {
-                    <div class="col-2">
-                        <div class="container">
+                    <div class="col-4 col-md-2 gap-2">
+                        <div class="container p-0">
                             <div class="row">
-                                @($"job_{task.JobId}_task_{task.TaskId}")
+                                <div class="col">
+                                    @($"job_{task.JobId}_task_{task.TaskId}")
+                                </div>
                             </div>
                             <div class="row">
-                                @($"[{task.Start}, {task.End}]")
+                                <div class="col">
+                                    @($"[{task.Start}, {task.End}]")
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -121,9 +134,9 @@
     private DateTime _projectEndDate = DateTime.Now.Date.AddDays(20);
     private string _solver = "google";
     private readonly IEnumerable<dynamic> _solvers = Enum.GetNames<Solvers>().Select(x => new { Label = x.ToTitleCase(), Value = x.ToLower() });
-    private List<Machine> _machines = [];
+    private readonly List<Machine> _machines = [];
 
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         _result = await Http.GetFromJsonAsync<SolverResult>($"Or/{_solver}");
         if (_result is null) return;
@@ -132,7 +145,7 @@
 
     protected override void OnAfterRender(bool firstRender)
     {
-        if(firstRender) RenderTasks();
+        if (firstRender) RenderTasks();
         base.OnAfterRender(firstRender);
     }
 
@@ -158,6 +171,6 @@
         RenderTasks();
     }
 
-    private string MachineId(int id) => $"#Machine_{id}";
+    private static string MachineId(int id) => $"#Machine_{id}";
 
 }

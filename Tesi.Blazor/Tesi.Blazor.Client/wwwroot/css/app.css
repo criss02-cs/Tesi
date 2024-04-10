@@ -120,6 +120,15 @@ code {
 }
 
 
-.e-control, .e-gridcontent, .e-gridheader {
+.e-control, .e-gridcontent, .e-gridheader, .e-tooltip-wrap .e-tip-content {
     font-family: "Titillium Web", Geneva, Tahoma, sans-serif !important;
+}
+.e-tooltip-wrap .e-tip-content {
+    font-size: 14px !important;
+}
+
+.e-listview .e-list-header {
+    background-color: transparent !important;
+    padding: 0 !important;
+    font-size: 18px !important;
 }
