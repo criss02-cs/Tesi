@@ -1,4 +1,5 @@
 using Tesi.Blazor.Server.Business;
+using Tesi.Blazor.Server.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +16,9 @@ builder.Services.AddSingleton<SolverService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAnyOrigin",
-        builder =>
+        corsPolicyBuilder =>
         {
-            builder
+            corsPolicyBuilder
                 .AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
@@ -30,10 +31,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseCors("AllowAnyOrigin");
 app.UseHttpsRedirection();
