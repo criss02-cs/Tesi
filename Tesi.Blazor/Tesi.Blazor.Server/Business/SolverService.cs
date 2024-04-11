@@ -1,5 +1,6 @@
 ﻿using Gurobi;
 using Tesi.Blazor.Server.Exceptions;
+using Tesi.Blazor.Shared.Models;
 using Tesi.Solvers;
 using Tesi.Solvers.Implementations;
 using JobTask = Tesi.Solvers.Task;
@@ -61,13 +62,14 @@ public class SolverService
         };
     }
 
-    public SolverResult Solve()
+    public ApiResponse<SolverResult> Solve()
     {
         try
         {
             CalculateData();
-            return _solver?.Solve(_jobs, _horizon, _numMachines, _allMachines) ??
-                   new SolverResult([], 0, "Solver not initialized");
+            var result = _solver?.Solve(_jobs, _horizon, _numMachines, _allMachines) ??
+                         new SolverResult([], 0, "Solver not initialized");
+            return new ApiResponse<SolverResult>(result);
         }
         catch (Exception e)
         {

@@ -9,26 +9,21 @@ namespace Tesi.Blazor.Client.Services;
 
 public class SolverService(HttpClient http, SfDialogService dialogService)
 {
+    private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true, IncludeFields = true};
     public async Task<SolverResult?> Solve(string solver)
     {
         var response = await http.GetAsync($"Or/{solver}");
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonSerializer.Deserialize<ApiResponse<SolverResult>>(content, Options);
         switch (response.StatusCode)
         {
             case HttpStatusCode.OK:
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<SolverResult>(content,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                return result;
-            }
+                return result?.Result ?? new SolverResult([], 0, "");
             case HttpStatusCode.InternalServerError:
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<ApiResponse<object>>(content,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                await dialogService.AlertAsync(result?.Message, "Errore");
-                return new SolverResult([], 0, "");
-            }
+                {
+                    await dialogService.AlertAsync(result?.Message, "Errore");
+                    return new SolverResult([], 0, "");
+                }
             default:
                 return new SolverResult([], 0, "");
         }

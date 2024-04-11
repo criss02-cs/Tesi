@@ -14,8 +14,12 @@ public record AssignedTask(int JobId, int TaskId, int Start, int Duration) : ICo
     }
 }
 
-public record Task(int Machine, int Duration, int TaskId)
+public class Task(int machine, int duration, int taskId)
 {
+    public string Name => $"Task {TaskId}";
+    public int Machine { get; set; } = machine;
+    public int Duration { get; set; } = duration;
+    public int TaskId { get; set; } = taskId;
     public override string ToString()
     {
         return $"Machine_{Machine}_Duration_{Duration}_TaskId_{TaskId}";
@@ -24,11 +28,10 @@ public record Task(int Machine, int Duration, int TaskId)
 
 public record Job(int JobId, List<Task> Tasks)
 {
+    public string Name => $"Job {JobId}";
     public void AddTask(Task task) => Tasks.Add(task);
-    public override string ToString()
-    {
-        return $"Job_{JobId}";
-    }
+    public void RemoveTask(Task task) => Tasks.Remove(task);
+    public void ClearTasks() => Tasks.Clear();
 }
 
 public record SolverResult(Dictionary<int, List<AssignedTask>> AssignedTasks, long ElapsedMilliseconds, string Status);

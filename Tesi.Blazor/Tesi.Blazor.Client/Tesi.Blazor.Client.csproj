@@ -17,6 +17,8 @@
 		<PackageReference Include="Syncfusion.Blazor.Popups" Version="25.1.38" />
 		<PackageReference Include="Syncfusion.Blazor.Navigations " Version="25.1.38" />
 		<PackageReference Include="Syncfusion.Blazor.Lists" Version="25.1.38" />
+		<PackageReference Include="Syncfusion.Blazor.Cards" Version="25.1.38" />
+		<PackageReference Include="Syncfusion.Blazor.Inputs" Version="25.1.38" />
 	</ItemGroup>
 
 	<ItemGroup>

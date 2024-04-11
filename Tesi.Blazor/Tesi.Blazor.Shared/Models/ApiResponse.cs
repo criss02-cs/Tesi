@@ -6,4 +6,4 @@ using System.Threading.Tasks;
 
 namespace Tesi.Blazor.Shared.Models;
 
-public record ApiResponse<T>(T? Result, bool Success, string Message = "");
+public record ApiResponse<T>(T? Result, bool Success = true, string Message = "");

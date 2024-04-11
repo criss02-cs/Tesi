@@ -1,11 +1,6 @@
 ﻿@page "/"
-@using System.Text.Json.Serialization
-@using System.Text.Json
-@using Syncfusion.Blazor.Grids
-@using Tesi.Blazor.Client.Services
-@using Tesi.Blazor.Client.Utils
-@using Tesi.Blazor.Shared.ExtensionMethods
 @using Task = System.Threading.Tasks.Task
+@using System.Collections.ObjectModel
 @inject SolverService SolverService
 
 
@@ -13,8 +8,13 @@
 <div class="gantt">
     <div class="container my-3 mt-0 mx-0">
         <div class="row">
-            <div class="col-7 col-md-2">Tempo per l'esecuzione:</div>
-            <div class="col-3">@_result?.ElapsedMilliseconds ms</div>
+            <div class="col-6 col-md-2">Tempo per l'esecuzione:</div>
+            <div class="col-6 col-md-1">@_result?.ElapsedMilliseconds ms</div>
+            <div class="col-6 col-md-3">Tempo minimo per il completamento:</div>
+            <!-- Aggiungo + 1 ai giorni così conto anche il giorno corrente, altrimenti mi farebbe solo la differenza-->
+            <div class="col-6 col-md-2">@((_projectEndDate - _projectStartDate).Days + 1) giorni</div>
+            <div class="col-6 col-md-2">Stato soluzione:</div>
+            <div class="col-6 col-md-2">@_result?.Status</div>
         </div>
     </div>
     <SfGantt DataSource="@TaskCollection" IncludeWeekend="true" EnablePredecessorValidation="false"
@@ -72,9 +72,51 @@
         <div class="col-sm-12 col-md-9">
             <SfAccordion>
                 <AccordionItems>
-                    <AccordionItem Header="Job 0" Content="Lista di task"></AccordionItem>
+                    @foreach (var job in _jobs)
+                    {
+                        <AccordionItem Header="@job.Name">
+                            <ContentTemplate>
+                                <div class="container">
+                                    <div class="row row-cols-1 row-cols-md-4">
+                                        @foreach (var task in job.Tasks)
+                                        {
+                                            <div class="col">
+                                                <SfCard>
+                                                    <CardHeader Title="@task.Name" />
+                                                    <CardContent>
+                                                        <div class="container px-0">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <SfComboBox TValue="int" TItem="Machine" Placeholder="Seleziona una macchine" DataSource="@_machines" @bind-Value="task.Machine">
+                                                                        <ComboBoxFieldSettings Text="Description" Value="Id"></ComboBoxFieldSettings>
+                                                                        @* <ComboBoxEvents TValue="string" TItem="SelectItem<string>" OnValueSelect="@OnSolverSelected"></ComboBoxEvents> *@
+                                                                        <ComboBoxTemplates TItem="Machine">
+                                                                            <NoRecordsTemplate>
+                                                                                <span class="norecord">Nessuna macchina presente.</span>
+                                                                            </NoRecordsTemplate>
+                                                                        </ComboBoxTemplates>
+                                                                    </SfComboBox>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <SfNumericTextBox TValue="int" Value="@task.Duration" Min="1"></SfNumericTextBox>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </CardContent>
+                                                </SfCard>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <button @onclick="() => AddNewTask(job)" type="button" class="btn btn-success mt-2">Aggiungi un nuovo task</button>
+                            </ContentTemplate>
+                        </AccordionItem>
+                    }
                 </AccordionItems>
             </SfAccordion>
+            <button @onclick="AddNewJob" type="button" class="btn btn-success mt-2">Aggiungi un nuovo job</button>
         </div>
         <div class="col-sm-12 col-md-3">
             <SfListView DataSource="_machines" ShowHeader="true" HeaderTitle="Macchine">
@@ -96,7 +138,7 @@
                     </Template>
                 </ListViewTemplates>
             </SfListView>
-            <button @onclick="() => _machines.Add(new Machine(_machines.Count + 1))" type="button" class="btn btn-success mt-2">Aggiungi una nuova macchina</button>
+            <button @onclick="AddNewMachine" type="button" class="btn btn-success mt-2">Aggiungi una nuova macchina</button>
         </div>
     </div>
 </div>
@@ -140,7 +182,8 @@
     private DateTime _projectEndDate = DateTime.Now.Date.AddDays(20);
     private string _solver = "google";
     private readonly IEnumerable<SelectItem<string>> _solvers = Enum.GetNames<Solvers>().Select(x => new SelectItem<string>(x.ToLower(), x.ToTitleCase()));
-    private readonly List<Machine> _machines = [];
+    private readonly ObservableCollection<Machine> _machines = [];
+    private readonly List<Job> _jobs = [];
 
     protected override async Task OnInitializedAsync()
     {
@@ -178,5 +221,23 @@
     }
 
     private static string MachineId(int id) => $"#Machine_{id}";
+
+    private void AddNewMachine(MouseEventArgs e)
+    {
+        _machines.Add(new Machine(_machines.Count + 1));
+        StateHasChanged();
+    }
+
+    private void AddNewJob(MouseEventArgs e)
+    {
+        _jobs.Add(new Job(_jobs.Count + 1, []));
+        StateHasChanged();
+    }
+
+    private void AddNewTask(Job job)
+    {
+        job.AddTask(new Tesi.Solvers.Task(0, 0, job.Tasks.Count + 1));
+        StateHasChanged();
+    }
 
 }
