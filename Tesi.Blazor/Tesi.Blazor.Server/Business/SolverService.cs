@@ -1,4 +1,6 @@
-﻿using Tesi.Solvers;
+﻿using Gurobi;
+using Tesi.Blazor.Server.Exceptions;
+using Tesi.Solvers;
 using Tesi.Solvers.Implementations;
 using JobTask = Tesi.Solvers.Task;
 
@@ -38,8 +40,8 @@ public class SolverService
 
     public SolverService()
     {
-
     }
+
     public SolverService(ISolver? solver)
     {
         _solver = solver;
@@ -61,8 +63,24 @@ public class SolverService
 
     public SolverResult Solve()
     {
-        CalculateData();
-        return _solver?.Solve(_jobs, _horizon, _numMachines, _allMachines) ?? new SolverResult([], 0, "Solver not initialized");
+        try
+        {
+            CalculateData();
+            return _solver?.Solve(_jobs, _horizon, _numMachines, _allMachines) ??
+                   new SolverResult([], 0, "Solver not initialized");
+        }
+        catch (Exception e)
+        {
+            switch (e)
+            {
+                case DllNotFoundException or FileNotFoundException:
+                    throw new SystemNotSupportedException("This solver is not supported on this system");
+                case GRBException when e.Message.Contains("No Gurobi license found"):
+                    throw new NoLicenseFoundException("No license found for this solver");
+                default:
+                    throw;
+            }
+        }
     }
 
     private void CalculateData()
@@ -71,6 +89,7 @@ public class SolverService
         {
             _numMachines = Math.Max(_numMachines, 1 + task.Machine);
         }
+
         _allMachines = Enumerable.Range(0, _numMachines).ToArray();
         foreach (var task in _jobs.SelectMany(job => job.Tasks))
         {
