@@ -2,10 +2,13 @@
 @using System.Text.Json.Serialization
 @using System.Text.Json
 @using Syncfusion.Blazor.Grids
+@using Tesi.Blazor.Client.Utils
 @using Tesi.Blazor.Shared.ExtensionMethods
 @using Task = System.Threading.Tasks.Task
 @inject HttpClient Http
 
+
+<!-- Gantt chart -->
 <div class="gantt">
     <div class="container my-3 mt-0 mx-0">
         <div class="row">
@@ -51,15 +54,16 @@
     </SfGantt>
 </div>
 
+<!-- Form data -->
 <div class="container my-3">
     <div class="row my-2">
         <div class="col-6 col-md-9">
             <span style="font-weight: bold; font-size: 20px">Carica dati</span>
         </div>
         <div class="col-6 col-md-3">
-            <SfComboBox TValue="string" TItem="dynamic" Placeholder="Seleziona un solver" DataSource="@_solvers" @bind-Value="_solver">
+            <SfComboBox TValue="string" TItem="SelectItem<string>" Placeholder="Seleziona un solver" DataSource="@_solvers" @bind-Value="_solver">
                 <ComboBoxFieldSettings Text="Label" Value="Value"></ComboBoxFieldSettings>
-                <ComboBoxEvents TValue="string" TItem="dynamic" OnValueSelect="@OnSolverSelected"></ComboBoxEvents>
+                <ComboBoxEvents TValue="string" TItem="SelectItem<string>" OnValueSelect="@OnSolverSelected"></ComboBoxEvents>
             </SfComboBox>
         </div>
     </div>
@@ -79,7 +83,7 @@
                         <div class="container m-0 p-0">
                             <div class="row">
                                 <div class="col-10">
-                                    @(context.Description)
+                                    @context.Description
                                 </div>
                                 <div class="col-2" style="text-align: center">
                                     <SfTooltip Target="@MachineId(context.Id)" Content="Elimina la macchina">
@@ -96,6 +100,7 @@
     </div>
 </div>
 
+<!-- Result table -->
 <div class="container my-3 mx-0 mx-md-auto">
     @if (_result is not null)
     {
@@ -133,7 +138,7 @@
     private readonly DateTime _projectStartDate = DateTime.Now.Date;
     private DateTime _projectEndDate = DateTime.Now.Date.AddDays(20);
     private string _solver = "google";
-    private readonly IEnumerable<dynamic> _solvers = Enum.GetNames<Solvers>().Select(x => new { Label = x.ToTitleCase(), Value = x.ToLower() });
+    private readonly IEnumerable<SelectItem<string>> _solvers = Enum.GetNames<Solvers>().Select(x => new SelectItem<string>(x.ToLower(), x.ToTitleCase()));
     private readonly List<Machine> _machines = [];
 
     protected override async Task OnInitializedAsync()
@@ -163,7 +168,7 @@
         if (max != null) _projectEndDate = _projectStartDate.AddDays(max.Value);
     }
 
-    private async Task OnSolverSelected(SelectEventArgs<dynamic> obj)
+    private async Task OnSolverSelected(SelectEventArgs<SelectItem<string>> obj)
     {
         _solver = obj.ItemData.Value;
         _result = await Http.GetFromJsonAsync<SolverResult>($"Or/{_solver}");
