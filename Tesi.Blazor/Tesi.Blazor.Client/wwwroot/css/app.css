@@ -131,4 +131,9 @@ code {
     background-color: transparent !important;
     padding: 0 !important;
     font-size: 18px !important;
+    padding-left: 5px !important;
+}
+.light .e-listview .e-list-header {
+    color: black !important;
+    font-weight: bold !important;
 }
