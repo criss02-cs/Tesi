@@ -2,10 +2,11 @@
 @using System.Text.Json.Serialization
 @using System.Text.Json
 @using Syncfusion.Blazor.Grids
+@using Tesi.Blazor.Client.Services
 @using Tesi.Blazor.Client.Utils
 @using Tesi.Blazor.Shared.ExtensionMethods
 @using Task = System.Threading.Tasks.Task
-@inject HttpClient Http
+@inject SolverService SolverService
 
 
 <!-- Gantt chart -->
@@ -143,7 +144,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _result = await Http.GetFromJsonAsync<SolverResult>($"Or/{_solver}");
+        _result = await SolverService.Solve(_solver);
         if (_result is null) return;
         RenderTasks();
     }
@@ -171,7 +172,7 @@
     private async Task OnSolverSelected(SelectEventArgs<SelectItem<string>> obj)
     {
         _solver = obj.ItemData.Value;
-        _result = await Http.GetFromJsonAsync<SolverResult>($"Or/{_solver}");
+        _result = await SolverService.Solve(_solver);
         if (_result is null) return;
         RenderTasks();
     }

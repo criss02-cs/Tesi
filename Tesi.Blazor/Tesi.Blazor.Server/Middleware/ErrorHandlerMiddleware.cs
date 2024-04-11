@@ -17,7 +17,7 @@ public class ErrorHandlerMiddleware(RequestDelegate next)
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            //TODO creare log per segnalare eventuali errori, se diversi da quelli già gestiti
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             await context.Response.WriteAsJsonAsync(new ApiResponse<object>(null, false, e.Message));
         }
