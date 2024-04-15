@@ -1,0 +1,118 @@
+﻿@page "/analysis"
+@inject SolverService SolverService
+@inject ConfigService ConfigService
+@using ExecutionAnalysis = Tesi.Blazor.Shared.Models.Analysis;
+@using Task = System.Threading.Tasks.Task
+@inject IJSRuntime JsRuntime;
+
+
+<PageTitle>Analysis</PageTitle>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <SfChart Title="Tempistiche di 10 esecuzioni in ms" Background="@_backgroundColor" Width="100%">
+                <ChartTitleStyle Size="23px" Color="@_titleTextColor" FontFamily="Titillium Web" FontWeight="bold"></ChartTitleStyle>
+                <ChartPrimaryXAxis>
+                    <ChartAxisLabelStyle Color="@_titleTextColor" FontFamily="Titillium Web" />
+                </ChartPrimaryXAxis>
+                <ChartPrimaryYAxis>
+                    <ChartAxisLabelStyle Color="@_titleTextColor" FontFamily="Titillium Web" />
+                </ChartPrimaryYAxis>
+                <ChartTooltipSettings Enable="true">
+                    <ChartTooltipTextStyle FontFamily="Titillium Web" />
+                </ChartTooltipSettings>
+                @foreach (var analysis in _analysis)
+                {
+                    <ChartSeriesCollection>
+                        <ChartSeries DataSource="analysis.Results" XName="Id" YName="Durations" Name="@Enum.GetName(analysis.Solver)?.ToTitleCase()" Type="ChartSeriesType.Line">
+                            <ChartMarker Visible="true" Height="10" Width="10"></ChartMarker>
+                        </ChartSeries>
+                    </ChartSeriesCollection>
+                }
+                <ChartLegendSettings Visible="true">
+                    <ChartLegendTextStyle FontFamily="Titillium Web" Color="@_titleTextColor" />
+                </ChartLegendSettings>
+            </SfChart>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col table-responsive">
+            <table class="table @_tableTheme">
+                <thead>
+                    <tr style="text-align: center">
+                        <th scope="col">Libreria</th>
+                        <th scope="col">Velocità media (ms)</th>
+                        <th scope="col">Open Source</th>
+                        <th scope="col">Compatibile con .NET 6 e superiori</th>
+                        <th scope="col">Ultima versione</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="text-align: center">
+                        <th scope="row">Google OR-Tools</th>
+                        <td>@_analysis.FirstOrDefault(x => x.Solver == Solvers.GOOGLE)?.Average</td>
+                        <td><i class="bi bi-check-lg"></i></td>
+                        <td><i class="bi bi-check-lg"></i></td>
+                        <td><a href="https://github.com/google/or-tools/releases/tag/v9.9" target="_blank" style="text-decoration: none">9.9</a></td>
+                    </tr>
+                    <tr style="text-align: center">
+                        <th scope="row">Gurobi</th>
+                        <td>@_analysis.FirstOrDefault(x => x.Solver == Solvers.GUROBI)?.Average</td>
+                        <td><i class="bi bi-x-lg"></i></td>
+                        <td><i class="bi bi-check-lg"></i></td>
+                        <td><a href="https://www.gurobi.com/downloads/recent-bug-fixes-by-version/" target="_blank" style="text-decoration: none">11.0.1</a></td>
+                    </tr>
+                    <tr style="text-align: center">
+                        <th scope="row">IBM ILOG CPLEX</th>
+                        <td>@_analysis.FirstOrDefault(x => x.Solver == Solvers.IBM)?.Average</td>
+                        <td><i class="bi bi-x-lg"></i></td>
+                        <td><i class="bi bi-x-lg"></i></td>
+                        <td><a href="https://www.ibm.com/docs/en/icos/22.1.1" target="_blank" style="text-decoration: none">22.1.1</a></td>
+                    </tr>
+                    <tr style="text-align: center">
+                        <th scope="row">Microsoft Z3</th>
+                        <td>@_analysis.FirstOrDefault(x => x.Solver == Solvers.MICROSOFT)?.Average</td>
+                        <td><i class="bi bi-check-lg"></i></td>
+                        <td><i class="bi bi-x-lg"></i></td>
+                        <td><a href="https://github.com/Z3Prover/z3/releases/tag/z3-4.13.0" target="_blank" style="text-decoration: none">4.13.0</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<ExecutionAnalysis> _analysis = [];
+    private string _titleTextColor = "#000";
+    private string _backgroundColor = "#fff";
+    private string _tableTheme = "";
+    protected override async Task OnInitializedAsync()
+    {
+        var data = await ConfigService.LoadSampleData();
+        _analysis = await SolverService.MakeAnalysis(10, data);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var theme = await JsRuntime.InvokeAsync<string>("getTheme");
+        switch (theme)
+        {
+            case "dark":
+                _titleTextColor = "#fff";
+                _backgroundColor = "#1a1a1a";
+                _tableTheme = "table-dark";
+                break;
+            case "light":
+                _titleTextColor = "#000";
+                _backgroundColor = "#fff";
+                _tableTheme = "";
+                break;
+        }
+    }
+
+}

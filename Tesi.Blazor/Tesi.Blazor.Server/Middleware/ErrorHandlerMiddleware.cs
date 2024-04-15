@@ -1,4 +1,5 @@
-﻿using Tesi.Blazor.Shared.Models;
+﻿using Tesi.Blazor.Server.Exceptions;
+using Tesi.Blazor.Shared.Models;
 
 namespace Tesi.Blazor.Server.Middleware;
 
@@ -14,6 +15,11 @@ public class ErrorHandlerMiddleware(RequestDelegate next)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await context.Response.WriteAsJsonAsync(new ApiResponse<object>(null, false, "Unauthorized access"));
+        }
+        catch (SolverNotFoundException e)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsJsonAsync(new ApiResponse<object>(null, false, e.Message));
         }
         catch (Exception e)
         {

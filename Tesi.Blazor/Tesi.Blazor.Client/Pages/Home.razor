@@ -186,18 +186,12 @@
     private readonly IEnumerable<SelectItem<string>> _solvers = Enum.GetNames<Solvers>().Select(x => new SelectItem<string>(x.ToLower(), x.ToTitleCase()));
     private readonly ObservableCollection<Machine> _machines = [];
     private readonly List<Job> _jobs = [];
-
-    protected override async Task OnInitializedAsync()
-    {
-        // mi carico dei dati fittizi, e lo faccio scegliere se farlo oppure
-        if (_result is null) return;
-        RenderTasks();
-    }
-
+    
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            // mi carico dei dati fittizi, e lo faccio scegliere se farlo oppure
             var isConfirm = await DialogService.ConfirmAsync("Vuoi caricare dei dati iniziali?", "Carica dati iniziali", new DialogOptions
             {
                 PrimaryButtonOptions = new DialogButtonOptions { Content = "Sì" },
@@ -211,7 +205,7 @@
                 data.SelectMany(x => x.Tasks.Select(y => y.Machine)).Distinct().ToList().ForEach(x => _machines.Add(new Machine(x)));
                 _jobs.Clear();
                 _jobs.AddRange(data);
-                _result = await SolverService.Solve(_solver);
+                _result = await SolverService.Solve(_solver, _jobs);
                 if (_result is null) return;
                 RenderTasks();
                 StateHasChanged();
@@ -235,7 +229,7 @@
     private async Task OnSolverSelected(SelectEventArgs<SelectItem<string>> obj)
     {
         _solver = obj.ItemData.Value;
-        _result = await SolverService.Solve(_solver);
+        _result = await SolverService.Solve(_solver, _jobs);
         if (_result is null) return;
         RenderTasks();
     }

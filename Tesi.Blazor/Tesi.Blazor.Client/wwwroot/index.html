@@ -49,6 +49,11 @@
             }
             setTimeout(function () { document.getElementsByTagName('body')[0].style.display = 'block'; }, 300);
         }
+
+        function getTheme() {
+            const main = document.getElementsByTagName('main')[0];
+            return main.classList.item(0);
+        }
     </script>
 </body>
 

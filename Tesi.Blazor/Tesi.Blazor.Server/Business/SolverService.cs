@@ -14,24 +14,6 @@ namespace Tesi.Blazor.Server.Business;
 /// </summary>
 public class SolverService
 {
-    private readonly List<Job> _jobs =
-    [
-        new Job(0, [
-            new JobTask(0, 3, 1),
-            new JobTask(1, 2, 2),
-            new JobTask(2, 2, 3),
-        ]),
-        new Job(1, [
-            new JobTask(0, 2, 1),
-            new JobTask(2, 1, 2),
-            new JobTask(1, 4, 3),
-        ]),
-        new Job(2, [
-            new JobTask(1, 4, 1),
-            new JobTask(2, 3, 2),
-        ]),
-    ];
-
     private int _numMachines;
     private int[] _allMachines = [];
     private int _horizon;
@@ -62,12 +44,12 @@ public class SolverService
         };
     }
 
-    public ApiResponse<SolverResult> Solve()
+    public ApiResponse<SolverResult> Solve(List<Job> jobs)
     {
         try
         {
-            CalculateData();
-            var result = _solver?.Solve(_jobs, _horizon, _numMachines, _allMachines) ??
+            CalculateData(jobs);
+            var result = _solver?.Solve(jobs, _horizon, _numMachines, _allMachines) ??
                          new SolverResult([], 0, "Solver not initialized");
             return new ApiResponse<SolverResult>(result);
         }
@@ -85,15 +67,15 @@ public class SolverService
         }
     }
 
-    private void CalculateData()
+    private void CalculateData(IReadOnlyCollection<Job> jobs)
     {
-        foreach (var task in _jobs.SelectMany(job => job.Tasks))
+        foreach (var task in jobs.SelectMany(job => job.Tasks))
         {
             _numMachines = Math.Max(_numMachines, 1 + task.Machine);
         }
 
         _allMachines = Enumerable.Range(0, _numMachines).ToArray();
-        foreach (var task in _jobs.SelectMany(job => job.Tasks))
+        foreach (var task in jobs.SelectMany(job => job.Tasks))
         {
             _horizon += task.Duration;
         }
