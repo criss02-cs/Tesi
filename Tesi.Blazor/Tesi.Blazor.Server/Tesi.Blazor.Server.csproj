@@ -8,6 +8,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Content Remove="wwwroot\SampleData\sample-data.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="wwwroot\SampleData\sample-data.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.3" />
 	</ItemGroup>
@@ -17,5 +25,7 @@
 		<ProjectReference Include="..\Tesi.Blazor.Client\Tesi.Blazor.Client.csproj" />
 		<ProjectReference Include="..\Tesi.Blazor.Shared\Tesi.Blazor.Shared.csproj" />
 	</ItemGroup>
+
+	<ProjectExtensions><VisualStudio><UserProperties wwwroot_4sampledata_4sample-data_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

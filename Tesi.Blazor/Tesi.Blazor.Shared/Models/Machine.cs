@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace Tesi.Blazor.Shared.Models;
 public class Machine(int id)
 {
-    public Machine() : this(0)
+    public Machine() : this(-1)
     {
         
     }
     public int Id { get; set; } = id;
-    public string Description => Id > 0 ? $"Machine {Id}" : string.Empty;
+    public string Description => Id > -1 ? $"Machine {Id}" : string.Empty;
 }

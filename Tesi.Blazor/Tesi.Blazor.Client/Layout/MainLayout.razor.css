@@ -4,7 +4,6 @@
     height: 100vh;
     flex-direction: column;
 }
-
 main {
     flex: 1;
     overflow-y: scroll !important;
@@ -45,6 +44,9 @@ main {
 
     .top-row ::deep a, .top-row ::deep .btn-link {
         margin-left: 0;
+    }
+    .page {
+        height: 95vh !important;
     }
 }
 

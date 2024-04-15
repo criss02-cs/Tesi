@@ -7,12 +7,11 @@ using Tesi.Solvers;
 
 namespace Tesi.Blazor.Client.Services;
 
-public class SolverService(HttpClient http, SfDialogService dialogService)
+public class SolverService(HttpClient http, SfDialogService dialogService) : BaseService(http, dialogService)
 {
-    private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true, IncludeFields = true};
     public async Task<SolverResult?> Solve(string solver)
     {
-        var response = await http.GetAsync($"Or/{solver}");
+        var response = await Http.GetAsync($"Or/{solver}");
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<ApiResponse<SolverResult>>(content, Options);
         switch (response.StatusCode)
@@ -21,7 +20,7 @@ public class SolverService(HttpClient http, SfDialogService dialogService)
                 return result?.Result ?? new SolverResult([], 0, "");
             case HttpStatusCode.InternalServerError:
                 {
-                    await dialogService.AlertAsync(result?.Message, "Errore");
+                    await DialogService.AlertAsync(result?.Message, "Errore");
                     return new SolverResult([], 0, "");
                 }
             default:
