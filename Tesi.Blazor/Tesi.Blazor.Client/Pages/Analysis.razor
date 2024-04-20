@@ -54,28 +54,28 @@
                 <tbody>
                     <tr style="text-align: center">
                         <th scope="row">Google OR-Tools</th>
-                        <td>@_analysis.FirstOrDefault(x => x.Solver == Solvers.GOOGLE)?.Average</td>
+                        <td>@_analysis.FirstOrDefault(x => x.Solver == Solvers.Google)?.Average</td>
                         <td><i class="bi bi-check-lg"></i></td>
                         <td><i class="bi bi-check-lg"></i></td>
                         <td><a href="https://github.com/google/or-tools/releases/tag/v9.9" target="_blank" style="text-decoration: none">9.9</a></td>
                     </tr>
                     <tr style="text-align: center">
                         <th scope="row">Gurobi</th>
-                        <td>@_analysis.FirstOrDefault(x => x.Solver == Solvers.GUROBI)?.Average</td>
+                        <td>@_analysis.FirstOrDefault(x => x.Solver == Solvers.Gurobi)?.Average</td>
                         <td><i class="bi bi-x-lg"></i></td>
                         <td><i class="bi bi-check-lg"></i></td>
                         <td><a href="https://www.gurobi.com/downloads/recent-bug-fixes-by-version/" target="_blank" style="text-decoration: none">11.0.1</a></td>
                     </tr>
                     <tr style="text-align: center">
                         <th scope="row">IBM ILOG CPLEX</th>
-                        <td>@_analysis.FirstOrDefault(x => x.Solver == Solvers.IBM)?.Average</td>
+                        <td>@_analysis.FirstOrDefault(x => x.Solver == Solvers.Ibm)?.Average</td>
                         <td><i class="bi bi-x-lg"></i></td>
                         <td><i class="bi bi-x-lg"></i></td>
                         <td><a href="https://www.ibm.com/docs/en/icos/22.1.1" target="_blank" style="text-decoration: none">22.1.1</a></td>
                     </tr>
                     <tr style="text-align: center">
                         <th scope="row">Microsoft Z3</th>
-                        <td>@_analysis.FirstOrDefault(x => x.Solver == Solvers.MICROSOFT)?.Average</td>
+                        <td>@_analysis.FirstOrDefault(x => x.Solver == Solvers.Microsoft)?.Average</td>
                         <td><i class="bi bi-check-lg"></i></td>
                         <td><i class="bi bi-x-lg"></i></td>
                         <td><a href="https://github.com/Z3Prover/z3/releases/tag/z3-4.13.0" target="_blank" style="text-decoration: none">4.13.0</a></td>

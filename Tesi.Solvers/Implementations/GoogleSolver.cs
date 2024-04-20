@@ -9,16 +9,20 @@ using Google.OrTools.Sat;
 namespace Tesi.Solvers.Implementations;
 public class GoogleSolver : ISolver
 {
-    public SolverResult Solve(List<Job> jobs, int horizon, int numMachines, int[] allMachines)
+    public int Horizon { get; set; }
+    public int NumMachines { get; set; }
+    public int[] AllMachines { get; set; }
+
+    public SolverResult Solve(List<Job> jobs)
     {
         var model = new CpModel();
 
         var allTasks = new Dictionary<Tuple<int, int>, Tuple<IntVar, IntVar, IntervalVar>>(); // (start, end, duration)
         var machineToIntervals = new Dictionary<int, List<IntervalVar>>();
-        PopulateModelWithJobData(model, jobs, horizon, allTasks, machineToIntervals);
+        PopulateModelWithJobData(model, jobs, Horizon, allTasks, machineToIntervals);
 
         // vincolo di non sovrapposizione
-        foreach (var machine in allMachines)
+        foreach (var machine in AllMachines)
         {
             model.AddNoOverlap(machineToIntervals[machine]);
         }
@@ -35,7 +39,7 @@ public class GoogleSolver : ISolver
         }
 
         // funzione obiettivo
-        var objVar = model.NewIntVar(0, horizon, "makespan");
+        var objVar = model.NewIntVar(0, Horizon, "makespan");
         var ends = new List<IntVar>();
         foreach (var currentJob in jobs)
         {

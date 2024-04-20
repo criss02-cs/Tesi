@@ -14,9 +14,6 @@ namespace Tesi.Blazor.Server.Business;
 /// </summary>
 public class SolverService
 {
-    private int _numMachines;
-    private int[] _allMachines = [];
-    private int _horizon;
     private ISolver? _solver;
 
     #region CTORS
@@ -36,10 +33,11 @@ public class SolverService
     {
         _solver = solver switch
         {
-            Solvers.Solvers.GOOGLE => new GoogleSolver(),
-            Solvers.Solvers.IBM => new IbmSolver(),
-            Solvers.Solvers.GUROBI => new GurobiSolver(),
-            Solvers.Solvers.MICROSOFT => new MicrosoftSolver(),
+            Solvers.Solvers.Google => new GoogleSolver(),
+            Solvers.Solvers.Ibm => new IbmSolver(),
+            Solvers.Solvers.Gurobi => new GurobiSolver(),
+            Solvers.Solvers.Microsoft => new MicrosoftSolver(),
+            Solvers.Solvers.Cristiano => new JspSolver(),
             _ => _solver
         };
     }
@@ -48,8 +46,8 @@ public class SolverService
     {
         try
         {
-            CalculateData(jobs);
-            var result = _solver?.Solve(jobs, _horizon, _numMachines, _allMachines) ??
+            _solver?.CalculateData(jobs);
+            var result = _solver?.Solve(jobs) ??
                          new SolverResult([], 0, "Solver not initialized");
             return new ApiResponse<SolverResult>(result);
         }
@@ -64,20 +62,6 @@ public class SolverService
                 default:
                     throw;
             }
-        }
-    }
-
-    private void CalculateData(IReadOnlyCollection<Job> jobs)
-    {
-        foreach (var task in jobs.SelectMany(job => job.Tasks))
-        {
-            _numMachines = Math.Max(_numMachines, 1 + task.Machine);
-        }
-
-        _allMachines = Enumerable.Range(0, _numMachines).ToArray();
-        foreach (var task in jobs.SelectMany(job => job.Tasks))
-        {
-            _horizon += task.Duration;
         }
     }
 }

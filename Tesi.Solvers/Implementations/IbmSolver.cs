@@ -7,11 +7,15 @@ using System.Diagnostics;
 namespace Tesi.Solvers.Implementations;
 public class IbmSolver : ISolver
 {
-    public SolverResult Solve(List<Job> jobs, int horizon, int numMachines, int[] allMachines)
+    public int Horizon { get; set; }
+    public int NumMachines { get; set; }
+    public int[] AllMachines { get; set; }
+
+    public SolverResult Solve(List<Job> jobs)
     {
         var cplex = new Cplex();
         var numTasks = jobs.Max(x => x.Tasks.Count);
-        var (startTimes, durations, machines) = PopulateModel(cplex, jobs, numTasks, horizon);
+        var (startTimes, durations, machines) = PopulateModel(cplex, jobs, numTasks);
 
         // vincolo di precedenza
         for (var i = 0; i < jobs.Count; i++)
@@ -23,7 +27,7 @@ public class IbmSolver : ISolver
         }
 
         // vincolo di non sovrapposizione
-        for (var m = 0; m < numMachines; m++)
+        for (var m = 0; m < NumMachines; m++)
         {
             var tasksOnMachine = new List<(int i, int j)>();
             for (var i = 0; i < jobs.Count; i++)
@@ -44,15 +48,15 @@ public class IbmSolver : ISolver
                     var (i1, j1) = tasksOnMachine[t1];
                     var (i2, j2) = tasksOnMachine[t2];
                     var prec = cplex.BoolVar($"{i1}-{j1}_precedes_{i2}{j2}");
-                    var s = cplex.Sum(startTimes[i1][j1], cplex.Diff(durations[i1, j1], cplex.Prod(horizon, cplex.Diff(1, prec))));
+                    var s = cplex.Sum(startTimes[i1][j1], cplex.Diff(durations[i1, j1], cplex.Prod(Horizon, cplex.Diff(1, prec))));
                     cplex.AddLe(s, startTimes[i2][j2]);
-                    cplex.AddLe(cplex.Sum(startTimes[i2][j2], cplex.Diff(durations[i2, j2], cplex.Prod(horizon, prec))), startTimes[i1][j1]);
+                    cplex.AddLe(cplex.Sum(startTimes[i2][j2], cplex.Diff(durations[i2, j2], cplex.Prod(Horizon, prec))), startTimes[i1][j1]);
                 }
             }
         }
 
         // funzione obiettivo
-        var maxCompletionTime = cplex.NumVar(0, horizon, NumVarType.Int, "maxCompletionTime");
+        var maxCompletionTime = cplex.NumVar(0, Horizon, NumVarType.Int, "maxCompletionTime");
         for (var i = 0; i < jobs.Count; i++)
         {
             for (var j = 0; j < jobs[i].Tasks.Count; j++)
@@ -69,7 +73,7 @@ public class IbmSolver : ISolver
         stopwatch.Stop();
         if (cplex.GetStatus() != Cplex.Status.Optimal && cplex.GetStatus() != Cplex.Status.Feasible)
             return new SolverResult([], stopwatch.ElapsedMilliseconds, cplex.GetStatus().ToString());
-        return new SolverResult(GetAssignedTasks(cplex, jobs, numMachines, startTimes), stopwatch.ElapsedMilliseconds,
+        return new SolverResult(GetAssignedTasks(cplex, jobs, NumMachines, startTimes), stopwatch.ElapsedMilliseconds,
             cplex.GetStatus().ToString());
     }
 
@@ -96,7 +100,7 @@ public class IbmSolver : ISolver
         return assignedJobs;
     }
 
-    private (INumVar[][], int[,], int[,]) PopulateModel(Cplex model, IReadOnlyList<Job> jobs, int numTasks, int horizon)
+    private (INumVar[][], int[,], int[,]) PopulateModel(Cplex model, IReadOnlyList<Job> jobs, int numTasks)
     {
         var durations = new int[jobs.Count, numTasks];
         var machines = new int[jobs.Count, numTasks];
@@ -108,7 +112,7 @@ public class IbmSolver : ISolver
             {
                 durations[i, j] = jobs[i].Tasks[j].Duration;
                 machines[i, j] = jobs[i].Tasks[j].Machine;
-                startTimes[i][j] = model.NumVar(0, horizon, NumVarType.Int, $"start_{i}_{j}");
+                startTimes[i][j] = model.NumVar(0, Horizon, NumVarType.Int, $"start_{i}_{j}");
             }
         }
 

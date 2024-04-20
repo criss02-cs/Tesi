@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 namespace Tesi.Solvers;
 public enum Solvers
 {
-    GOOGLE,
-    IBM,
-    GUROBI,
-    MICROSOFT
+    Google,
+    Ibm,
+    Gurobi,
+    Microsoft,
+    Cristiano
 }

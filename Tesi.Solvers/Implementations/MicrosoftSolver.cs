@@ -12,7 +12,11 @@ using OPTANO.Modeling.Optimization.Solver.Z3;
 namespace Tesi.Solvers.Implementations;
 public class MicrosoftSolver : ISolver
 {
-    public SolverResult Solve(List<Job> jobs, int horizon, int numMachines, int[] allMachines)
+    public int Horizon { get; set; }
+    public int NumMachines { get; set; }
+    public int[] AllMachines { get; set; }
+
+    public SolverResult Solve(List<Job> jobs)
     {
         var model = new Model();
         var startTimes = new VariableCollection<Task>(
@@ -21,7 +25,7 @@ public class MicrosoftSolver : ISolver
             "startTimes",
             (t) => $"StartTime_t{t}",
             (_) => 0,
-            (_) => horizon,
+            (_) => Horizon,
             (_) => VariableType.Integer,
             null);
 
@@ -37,7 +41,7 @@ public class MicrosoftSolver : ISolver
         }
 
         // vincolo di non sovrapposizione
-        foreach (var machine in allMachines)
+        foreach (var machine in AllMachines)
         {
             var tasksOnMachine = new List<(int i, int j)>();
             for (var i = 0; i < jobs.Count; i++)
@@ -61,16 +65,16 @@ public class MicrosoftSolver : ISolver
                     var task2 = jobs[i2].Tasks[j2];
                     var prec = new Variable($"{i1}-{j1}_precedes_{i2}{j2}", 0, 1, VariableType.Binary);
                     model.AddConstraint(
-                        startTimes[task1] + task1.Duration - horizon * (1 - prec) <= startTimes[task2]);
+                        startTimes[task1] + task1.Duration - Horizon * (1 - prec) <= startTimes[task2]);
                     model.AddConstraint(
-                        startTimes[task2] + task2.Duration - horizon * prec <= startTimes[task1]);
+                        startTimes[task2] + task2.Duration - Horizon * prec <= startTimes[task1]);
                 }
             }
         }
 
         // funzione obiettivo
-        var latestEnd = new Variable("LatestEnd", 0, horizon, VariableType.Integer);
-        foreach (var machine in allMachines)
+        var latestEnd = new Variable("LatestEnd", 0, Horizon, VariableType.Integer);
+        foreach (var machine in AllMachines)
         {
             var taskOnMachine = jobs.SelectMany(x => x.Tasks).Where(x => x.Machine == machine).ToList();
             foreach (var task in taskOnMachine)

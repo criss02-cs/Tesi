@@ -14,7 +14,7 @@
             <div class="col-6 col-md-1">@_result?.ElapsedMilliseconds ms</div>
             <div class="col-6 col-md-3">Tempo minimo per il completamento:</div>
             <!-- Aggiungo + 1 ai giorni così conto anche il giorno corrente, altrimenti mi farebbe solo la differenza-->
-            <div class="col-6 col-md-2">@((_projectEndDate - _projectStartDate).Days + 1) giorni</div>
+            <div class="col-6 col-md-2">@CompletionDays giorni</div>
             <div class="col-6 col-md-2">Stato soluzione:</div>
             <div class="col-6 col-md-2">@_result?.Status</div>
         </div>
@@ -186,6 +186,7 @@
     private readonly IEnumerable<SelectItem<string>> _solvers = Enum.GetNames<Solvers>().Select(x => new SelectItem<string>(x.ToLower(), x.ToTitleCase()));
     private readonly ObservableCollection<Machine> _machines = [];
     private readonly List<Job> _jobs = [];
+    private int CompletionDays => (_projectEndDate - _projectStartDate).Days;
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -219,11 +220,10 @@
         if (_result is null) return;
         var converter = new GanttAdapter(_result.AssignedTasks);
         TaskCollection = converter.Convert();
-        var max = TaskCollection
-            .Where(x => x.Name != null && x.Name.Contains("Machine"))
-            .Select(x => x.Duration?.Replace("days", "").ToInt32())
-            .Max(x => x);
-        if (max != null) _projectEndDate = _projectStartDate.AddDays(max.Value);
+        var max = _result.AssignedTasks
+            .SelectMany(x => x.Value)
+            .Max(x => x.End);
+        _projectEndDate = _projectStartDate.AddDays(max);
     }
 
     private async Task OnSolverSelected(SelectEventArgs<SelectItem<string>> obj)

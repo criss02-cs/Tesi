@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Tesi.Blazor.Server.Business;
 using Tesi.Blazor.Server.Exceptions;
+using Tesi.Blazor.Shared.ExtensionMethods;
 using Tesi.Blazor.Shared.Models;
 using Tesi.Solvers;
 
@@ -13,7 +14,7 @@ public class OrController(SolverService service) : ControllerBase
     [HttpPost, Route("{solver}")]
     public IActionResult Solve([FromBody] List<Job> data, string solver)
     {
-        if (!Enum.TryParse<Solvers.Solvers>(solver.ToUpper(), out var solverType))
+        if (!Enum.TryParse<Solvers.Solvers>(solver.ToTitleCase(), out var solverType))
         {
             throw new SolverNotFoundException($"Solver {solver} non trovato");
         }
