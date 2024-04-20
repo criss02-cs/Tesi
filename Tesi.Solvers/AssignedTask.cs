@@ -34,4 +34,4 @@ public record Job(int JobId, List<Task> Tasks)
     public void ClearTasks() => Tasks.Clear();
 }
 
-public record SolverResult(Dictionary<int, List<AssignedTask>> AssignedTasks, long ElapsedMilliseconds, string Status);
+public record SolverResult(Dictionary<int, List<AssignedTask>> AssignedTasks, double ElapsedMilliseconds, string Status);

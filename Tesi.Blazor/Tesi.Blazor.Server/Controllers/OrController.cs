@@ -29,7 +29,7 @@ public class OrController(SolverService service) : ControllerBase
         var solvers = Enum.GetNames<Solvers.Solvers>();
         foreach (var solver in solvers)
         {
-            if (!Enum.TryParse<Solvers.Solvers>(solver.ToUpper(), out var solverType))
+            if (!Enum.TryParse<Solvers.Solvers>(solver.ToTitleCase(), out var solverType))
             {
                 throw new SolverNotFoundException($"Solver {solver} non trovato");
             }

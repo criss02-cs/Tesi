@@ -89,8 +89,8 @@ public class MicrosoftSolver : ISolver
         var result = solver.Solve(model);
         stopwatch.Stop();
         if (result.Status is not SolutionStatus.Optimal or SolutionStatus.Feasible)
-            return new SolverResult([], stopwatch.ElapsedMilliseconds, result.Status.ToString());
-        return new SolverResult(GetAssignedTask(result, jobs, startTimes), stopwatch.ElapsedMilliseconds, result.Status.ToString());
+            return new SolverResult([], stopwatch.Elapsed.TotalMilliseconds, result.Status.ToString());
+        return new SolverResult(GetAssignedTask(result, jobs, startTimes), stopwatch.Elapsed.TotalMilliseconds, result.Status.ToString());
     }
 
 

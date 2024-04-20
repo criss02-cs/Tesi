@@ -161,3 +161,6 @@ code {
 .dark .e-card-header-title {
     font-size: 16px !important;
 }
+.dark .table {
+    color: white;
+}

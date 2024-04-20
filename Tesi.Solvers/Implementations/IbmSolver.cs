@@ -72,8 +72,8 @@ public class IbmSolver : ISolver
         cplex.Solve();
         stopwatch.Stop();
         if (cplex.GetStatus() != Cplex.Status.Optimal && cplex.GetStatus() != Cplex.Status.Feasible)
-            return new SolverResult([], stopwatch.ElapsedMilliseconds, cplex.GetStatus().ToString());
-        return new SolverResult(GetAssignedTasks(cplex, jobs, NumMachines, startTimes), stopwatch.ElapsedMilliseconds,
+            return new SolverResult([], stopwatch.Elapsed.TotalMilliseconds, cplex.GetStatus().ToString());
+        return new SolverResult(GetAssignedTasks(cplex, jobs, NumMachines, startTimes), stopwatch.Elapsed.TotalMilliseconds,
             cplex.GetStatus().ToString());
     }
 

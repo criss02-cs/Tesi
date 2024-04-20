@@ -46,7 +46,7 @@ public class JspSolver : ISolver
             }
         }
         stopwatch.Stop();
-        return new SolverResult(assignedJobs, stopwatch.ElapsedMilliseconds, "Feasible");
+        return new SolverResult(assignedJobs, stopwatch.Elapsed.TotalMilliseconds, "Feasible");
     }
 
 }

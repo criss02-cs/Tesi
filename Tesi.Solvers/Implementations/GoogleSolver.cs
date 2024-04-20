@@ -55,8 +55,8 @@ public class GoogleSolver : ISolver
         stopwatch.Start();
         var status = solver.Solve(model);
         stopwatch.Stop();
-        if (status is not CpSolverStatus.Optimal or CpSolverStatus.Feasible) return new SolverResult([], stopwatch.ElapsedMilliseconds, status.ToString());
-        return new SolverResult(GetAssignedTasks(solver, allTasks, jobs), stopwatch.ElapsedMilliseconds, status.ToString());
+        if (status is not CpSolverStatus.Optimal or CpSolverStatus.Feasible) return new SolverResult([], stopwatch.Elapsed.TotalMilliseconds, status.ToString());
+        return new SolverResult(GetAssignedTasks(solver, allTasks, jobs), stopwatch.Elapsed.TotalMilliseconds, status.ToString());
     }
 
     private static Dictionary<int, List<AssignedTask>> GetAssignedTasks(CpSolver solver,

@@ -78,9 +78,9 @@ public class GurobiSolver : ISolver
         stopwatch.Start();
         model.Optimize();
         stopwatch.Stop();
-        if (model.Status != GRB.Status.OPTIMAL) return new SolverResult([], stopwatch.ElapsedMilliseconds, "");
+        if (model.Status != GRB.Status.OPTIMAL) return new SolverResult([], stopwatch.Elapsed.TotalMilliseconds, "");
 
-        return new SolverResult(GetAssignedTasks(model, jobs, NumMachines), stopwatch.ElapsedMilliseconds, nameof(GRB.Status.OPTIMAL));
+        return new SolverResult(GetAssignedTasks(model, jobs, NumMachines), stopwatch.Elapsed.TotalMilliseconds, nameof(GRB.Status.OPTIMAL));
     }
     
     private static Dictionary<int, List<AssignedTask>> GetAssignedTasks(GRBModel model, IReadOnlyList<Job> jobs, int numMachines)
