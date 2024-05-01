@@ -60,8 +60,11 @@
 <!-- Form data -->
 <div class="container my-3">
     <div class="row my-2">
-        <div class="col-6 col-md-9">
+        <div class="col-4 col-md-7">
             <span style="font-weight: bold; font-size: 20px">Carica dati</span>
+        </div>
+        <div class="col-2">
+            <button @onclick="CaricaDati" type="button" class="btn btn-success w-100">Carica dati</button>
         </div>
         <div class="col-6 col-md-3">
             <SfComboBox TValue="string" TItem="SelectItem<string>" Placeholder="Seleziona un solver" DataSource="@_solvers" @bind-Value="_solver">
@@ -102,7 +105,7 @@
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col">
-                                                                    <SfNumericTextBox TValue="int" Value="@task.Duration" Min="1"></SfNumericTextBox>
+                                                                    <SfNumericTextBox TValue="int" @bind-Value="@task.Duration" Min="1"></SfNumericTextBox>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -252,6 +255,13 @@
     {
         job.AddTask(new Tesi.Solvers.Task(0, 0, job.Tasks.Count + 1));
         StateHasChanged();
+    }
+
+    private async Task CaricaDati()
+    {
+        _result = await SolverService.Solve(_solver, _jobs);
+        if (_result is null) return;
+        RenderTasks();
     }
 
 }
