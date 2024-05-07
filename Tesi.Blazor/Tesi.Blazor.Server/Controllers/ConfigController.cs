@@ -24,4 +24,13 @@ public class ConfigController(IConfiguration config, IWebHostEnvironment webHost
         var response = new ApiResponse<List<Job>>(data);
         return Ok(response);
     }
+
+    [HttpGet, Route("GetLargeData")]
+    public async Task<IActionResult> GetLargeData()
+    {
+        var largeData = await System.IO.File.ReadAllTextAsync($"{webHostEnvironment.WebRootPath}/SampleData/large-sample-data.json");
+        var data = JsonSerializer.Deserialize<List<Job>>(largeData, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true});
+        var response = new ApiResponse<List<Job>>(data);
+        return Ok(response);
+    }
 }

@@ -10,7 +10,7 @@ public class ConfigService(HttpClient http, SfDialogService service) : BaseServi
 {
     public async Task<List<Job>> LoadSampleData()
     {
-        var response = await Http.GetAsync($"api/Config/GetSampleData");
+        var response = await Http.GetAsync($"api/Config/GetLargeData");
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<ApiResponse<List<Job>>>(content, Options);
         switch (response.StatusCode)
