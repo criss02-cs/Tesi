@@ -3,24 +3,24 @@
     "jobId": 0,
     "tasks": [
       {
-        "machine": 0,
-        "duration": 4,
-        "taskId": 0
+        "taskId": 0,
+        "duration": 9,
+        "machine": 3
       },
       {
-        "machine": 3,
-        "duration": 5,
-        "taskId": 1
+        "taskId": 1,
+        "duration": 3,
+        "machine": 1
       },
       {
-        "machine": 3,
-        "duration": 1,
-        "taskId": 2
+        "taskId": 2,
+        "duration": 7,
+        "machine": 3
       },
       {
-        "machine": 1,
-        "duration": 8,
-        "taskId": 3
+        "taskId": 3,
+        "duration": 6,
+        "machine": 3
       }
     ]
   },
@@ -28,14 +28,14 @@
     "jobId": 1,
     "tasks": [
       {
-        "machine": 3,
+        "taskId": 0,
         "duration": 9,
-        "taskId": 0
+        "machine": 2
       },
       {
-        "machine": 0,
-        "duration": 1,
-        "taskId": 1
+        "taskId": 1,
+        "duration": 7,
+        "machine": 3
       }
     ]
   },
@@ -43,9 +43,24 @@
     "jobId": 2,
     "tasks": [
       {
-        "machine": 2,
-        "duration": 7,
-        "taskId": 0
+        "taskId": 0,
+        "duration": 2,
+        "machine": 3
+      },
+      {
+        "taskId": 1,
+        "duration": 2,
+        "machine": 3
+      },
+      {
+        "taskId": 2,
+        "duration": 1,
+        "machine": 0
+      },
+      {
+        "taskId": 3,
+        "duration": 9,
+        "machine": 0
       }
     ]
   },
@@ -53,29 +68,14 @@
     "jobId": 3,
     "tasks": [
       {
-        "machine": 3,
-        "duration": 4,
-        "taskId": 0
+        "taskId": 0,
+        "duration": 10,
+        "machine": 1
       },
       {
-        "machine": 3,
-        "duration": 6,
-        "taskId": 1
-      },
-      {
-        "machine": 2,
-        "duration": 1,
-        "taskId": 2
-      },
-      {
-        "machine": 1,
-        "duration": 5,
-        "taskId": 3
-      },
-      {
-        "machine": 2,
-        "duration": 1,
-        "taskId": 4
+        "taskId": 1,
+        "duration": 2,
+        "machine": 0
       }
     ]
   },
@@ -83,19 +83,24 @@
     "jobId": 4,
     "tasks": [
       {
-        "machine": 3,
+        "taskId": 0,
         "duration": 8,
-        "taskId": 0
+        "machine": 3
       },
       {
-        "machine": 2,
-        "duration": 5,
-        "taskId": 1
+        "taskId": 1,
+        "duration": 4,
+        "machine": 3
       },
       {
-        "machine": 3,
-        "duration": 2,
-        "taskId": 2
+        "taskId": 2,
+        "duration": 4,
+        "machine": 2
+      },
+      {
+        "taskId": 3,
+        "duration": 10,
+        "machine": 1
       }
     ]
   },
@@ -103,14 +108,19 @@
     "jobId": 5,
     "tasks": [
       {
-        "machine": 0,
-        "duration": 5,
-        "taskId": 0
+        "taskId": 0,
+        "duration": 2,
+        "machine": 2
       },
       {
-        "machine": 1,
+        "taskId": 1,
         "duration": 1,
-        "taskId": 1
+        "machine": 1
+      },
+      {
+        "taskId": 2,
+        "duration": 7,
+        "machine": 0
       }
     ]
   },
@@ -118,19 +128,9 @@
     "jobId": 6,
     "tasks": [
       {
-        "machine": 0,
-        "duration": 5,
-        "taskId": 0
-      },
-      {
-        "machine": 1,
-        "duration": 8,
-        "taskId": 1
-      },
-      {
-        "machine": 0,
-        "duration": 2,
-        "taskId": 2
+        "taskId": 0,
+        "duration": 9,
+        "machine": 1
       }
     ]
   },
@@ -138,9 +138,9 @@
     "jobId": 7,
     "tasks": [
       {
-        "machine": 2,
-        "duration": 4,
-        "taskId": 0
+        "taskId": 0,
+        "duration": 1,
+        "machine": 0
       }
     ]
   },
@@ -148,19 +148,19 @@
     "jobId": 8,
     "tasks": [
       {
-        "machine": 0,
-        "duration": 9,
-        "taskId": 0
+        "taskId": 0,
+        "duration": 3,
+        "machine": 0
       },
       {
-        "machine": 2,
-        "duration": 10,
-        "taskId": 1
+        "taskId": 1,
+        "duration": 4,
+        "machine": 3
       },
       {
-        "machine": 3,
-        "duration": 6,
-        "taskId": 2
+        "taskId": 2,
+        "duration": 4,
+        "machine": 3
       }
     ]
   },
@@ -168,104 +168,19 @@
     "jobId": 9,
     "tasks": [
       {
-        "machine": 0,
-        "duration": 6,
-        "taskId": 0
-      }
-    ]
-  },
-  {
-    "jobId": 10,
-    "tasks": [
-      {
-        "machine": 2,
+        "taskId": 0,
         "duration": 1,
-        "taskId": 0
+        "machine": 2
       },
       {
-        "machine": 0,
-        "duration": 6,
-        "taskId": 1
+        "taskId": 1,
+        "duration": 1,
+        "machine": 2
       },
       {
-        "machine": 1,
-        "duration": 2,
-        "taskId": 2
-      },
-      {
-        "machine": 3,
-        "duration": 8,
-        "taskId": 3
-      }
-    ]
-  },
-  {
-    "jobId": 11,
-    "tasks": [
-      {
-        "machine": 0,
-        "duration": 9,
-        "taskId": 0
-      },
-      {
-        "machine": 0,
-        "duration": 2,
-        "taskId": 1
-      },
-      {
-        "machine": 0,
-        "duration": 10,
-        "taskId": 2
-      }
-    ]
-  },
-  {
-    "jobId": 12,
-    "tasks": [
-      {
-        "machine": 3,
-        "duration": 8,
-        "taskId": 0
-      },
-      {
-        "machine": 2,
-        "duration": 7,
-        "taskId": 1
-      },
-      {
-        "machine": 2,
-        "duration": 8,
-        "taskId": 2
-      }
-    ]
-  },
-  {
-    "jobId": 13,
-    "tasks": [
-      {
-        "machine": 3,
+        "taskId": 2,
         "duration": 4,
-        "taskId": 0
-      },
-      {
-        "machine": 1,
-        "duration": 2,
-        "taskId": 1
-      }
-    ]
-  },
-  {
-    "jobId": 14,
-    "tasks": [
-      {
-        "machine": 0,
-        "duration": 1,
-        "taskId": 0
-      },
-      {
-        "machine": 0,
-        "duration": 1,
-        "taskId": 1
+        "machine": 2
       }
     ]
   }
