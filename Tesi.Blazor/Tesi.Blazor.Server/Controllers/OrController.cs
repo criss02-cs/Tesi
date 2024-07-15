@@ -37,8 +37,16 @@ public class OrController(SolverService service) : ControllerBase
             var results = new List<ResultAnalysis>();
             for (var i = 0; i < numOfExecutions; i++)
             {
-                var solved = service.Solve(data);
-                results.Add(new ResultAnalysis(i + 1, solved.Result?.ElapsedMilliseconds ?? 0));
+                try
+                {
+                    var solved = service.Solve(data);
+                    results.Add(new ResultAnalysis(i + 1, solved.Result?.ElapsedMilliseconds ?? 0));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    results.Add(new ResultAnalysis(i + 1, 0));
+                }
             }
             var analysis = new Analysis(solverType, results.Average(r => r.Durations), results);
             result.Add(analysis);
