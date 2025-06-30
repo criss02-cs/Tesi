@@ -1,0 +1,54 @@
+# Ignore build outputs
+**/bin/
+**/obj/
+**/out/
+**/.vs/
+
+# Ignore user-specific files
+**/*.user
+**/*.suo
+**/.vscode/
+**/.idea/
+
+# Ignore temporary files and logs
+**/logs/
+**/temp/
+**/tmp/
+**/*.log
+**/*.tmp
+
+# Ignore source control
+**/.git/
+**/.gitignore
+**/.gitattributes
+
+# Ignore Docker files
+**/Dockerfile*
+**/.dockerignore
+
+# Ignore package manager files
+**/node_modules/
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# Ignore OS specific files
+**/.DS_Store
+**/Thumbs.db
+**/desktop.ini
+
+# Ignore NuGet packages
+**/packages/
+**/*.nupkg
+
+# Ignore test results
+**/TestResults/
+**/*.trx
+**/*.coverage
+
+# Ignore publish profiles
+**/PublishProfiles/
+**/publish/
+
+# Keep the license file for Gurobi
+!**/gurobi.prod.lic

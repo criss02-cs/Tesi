@@ -1,0 +1,36 @@
+# Dockerfile per applicazione già pubblicata
+# Usa questo quando hai già i file di publish pronti sul server
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+
+# Install required dependencies for native libraries and unzip
+RUN apt-get update && apt-get install -y \
+    libc6-dev \
+    libgcc-s1 \
+    libstdc++6 \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy and extract the published application files
+# Assumi che i file pubblicati siano in un file "publish.zip" accanto al Dockerfile
+COPY publish.zip .
+RUN unzip publish.zip && rm publish.zip && \
+    # Se i file sono in una sottocartella, spostali nella directory principale
+    if [ -d "publish" ]; then mv publish/* . && rmdir publish; fi && \
+    # Verifica che il file DLL principale esista
+    ls -la Tesi.Blazor.Server.dll
+
+# Copy Gurobi license file if it exists
+COPY gurobi.prod.lic ./gurobi.prod.lic
+
+# Set environment variables
+ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+# Expose port
+EXPOSE 8080
+
+# Set the entry point
+ENTRYPOINT ["dotnet", "Tesi.Blazor.Server.dll"]

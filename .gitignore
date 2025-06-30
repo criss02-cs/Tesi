@@ -10,3 +10,6 @@ PublishProfiles/
 /Tesi.Blazor/Tesi.Blazor.Client/appsettings.secrets.json
 *.user
 .DS_Store
+
+publish/
+publish.zip
