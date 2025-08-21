@@ -56,3 +56,5 @@ EXPOSE 8080
 
 # Set the entry point
 ENTRYPOINT ["dotnet", "Tesi.Blazor.Server.dll"]
+
+# docker build -t criss02cs/tesi:latest . && docker push criss02cs/tesi:latest
